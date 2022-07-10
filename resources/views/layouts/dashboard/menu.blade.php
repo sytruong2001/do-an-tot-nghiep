@@ -1,4 +1,4 @@
-<div class="sidebar" data-color="orange" data-image="{{ asset('img/1.png') }}">
+<div class="sidebar" data-color="none" data-image="{{ asset('img/bg9.jpg') }}">
     <!--
 
         Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
@@ -19,7 +19,7 @@
         <div class="user">
             <div class="info">
                 <div class="photo">
-                    <img src="{{ asset('img/1.png') }}" />
+                    <img src="{{ asset('img/AngelRosé.jpg') }}" />
                 </div>
 
                 <a data-toggle="collapse" href="#collapseExample" class="collapsed">
@@ -37,7 +37,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('logout') }}" onclick="event.preventDefault();
+                            <a href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
                                 {{ __('Đăng xuất') }}
                             </a>
@@ -52,7 +53,7 @@
             </div>
         </div>
         <ul class="nav">
-            {{-- @role('admin') --}}
+            {{-- @role('super admin') --}}
             <li>
                 <a data-toggle="collapse" href="#chart">
                     <i class="pe-7s-note2"></i>
@@ -63,40 +64,72 @@
                 <div class="collapse" id="chart">
                     <ul class="nav">
                         <li>
-                            <a href="admin/new-register-user">
+                            <a href="superadmin/so-luong-khach">
+                                <span class="sidebar-mini">DC</span>
+                                <span class="sidebar-normal">Lượng khách mỗi ngày</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="superadmin/doanh-so">
                                 <span class="sidebar-mini">NRU</span>
-                                <span class="sidebar-normal">New register user</span>
+                                <span class="sidebar-normal">Doanh số</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li>
+                <a href="superadmin/account">
+                    <i class="pe-7s-graph"></i>
+                    <p>Nhận phòng</p>
+                </a>
+            </li>
+            <li>
+                <a href="superadmin/account">
+                    <i class="pe-7s-graph"></i>
+                    <p>Trả phòng</p>
+                </a>
+            </li>
+
+            <li>
+                <a data-toggle="collapse" href="#room">
+                    <i class="pe-7s-note2"></i>
+                    <p>Quản lý phòng
+                        <b class="caret"></b>
+                    </p>
+                </a>
+                <div class="collapse" id="room">
+                    <ul class="nav">
+                        <li>
+                            <a href="superadmin/type-room">
+                                <span class="sidebar-mini">TRs</span>
+                                <span class="sidebar-normal">Loại phòng</span>
                             </a>
                         </li>
                         <li>
-                            <a href="admin/daily-active-user">
-                                <span class="sidebar-mini">DAU</span>
-                                <span class="sidebar-normal">Daily active user</span>
+                            <a href="superadmin/rooms">
+                                <span class="sidebar-mini">IRs</span>
+                                <span class="sidebar-normal">Thông tin phòng</span>
                             </a>
                         </li>
                         <li>
-                            <a href="admin/revenue">
-                                <span class="sidebar-mini">REV</span>
-                                <span class="sidebar-normal">Revenue</span>
+                            <a href="superadmin/price-room">
+                                <span class="sidebar-mini">PRs</span>
+                                <span class="sidebar-normal">Giá phòng</span>
                             </a>
                         </li>
                     </ul>
                 </div>
             </li>
             <li>
-                <a href="admin/account">
+                <a href="superadmin/account">
                     <i class="pe-7s-graph"></i>
-                    <p>Quản lý tài khoản</p>
+                    <p>Quản lý tài khoản nhân viên</p>
                 </a>
             </li>
-            <li>
-                <a href="admin/account-locked">
-                    <i class="pe-7s-graph"></i>
-                    <p>Quản lý tài khoản bị khóa</p>
-                </a>
-            </li>
-
             {{-- @endrole --}}
+
         </ul>
     </div>
 </div>

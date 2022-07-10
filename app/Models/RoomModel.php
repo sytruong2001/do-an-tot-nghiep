@@ -7,5 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class RoomModel extends Model
 {
-    use HasFactory;
+    public $timestamps = false;
+    protected $fillable = [
+        "adults", "children", "id_type_room", "status"
+    ];
+
+    protected $primaryKey = "id_room";
+    protected $table = "rooms";
+    public function type_room()
+    {
+        return $this->belongsTo(TypeRoomModel::class, "id_type_room");
+    }
 }

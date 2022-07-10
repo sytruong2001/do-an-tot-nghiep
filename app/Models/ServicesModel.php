@@ -7,5 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class ServicesModel extends Model
 {
-    use HasFactory;
+    public $timestamps = false;
+    protected $fillable = [
+        "name", "amount", "price", "id_checkin_room"
+    ];
+
+    protected $primaryKey = "id_service";
+    protected $table = "services";
+    public function checkin()
+    {
+        return $this->belongsTo(CheckInModel::class, "id_checkin_room");
+    }
 }
