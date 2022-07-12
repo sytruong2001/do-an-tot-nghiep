@@ -33,8 +33,8 @@ class UserSeeder extends Seeder
             'updated_at' => now(),
             'email_verified_at' => now(),
         ]);
-        $supAdmin->assignRole('superadmin', 'admin');
-        $supAdmin2->assignRole('superadmin', 'admin');
+        $supAdmin->assignRole('superadmin');
+        $supAdmin2->assignRole('superadmin');
 
         $admin = User::create([
             'name' => 'Admin',

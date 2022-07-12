@@ -49,16 +49,26 @@ class typeRoomApi extends Controller
         $check = DB::table('type_room')->where('id_type_room', $id)->select('status')->first();
         $status = $check->status;
         if ($status == 1) {
-            $update = DB::table('type_room')
+            $update_type_room = DB::table('type_room')
                 ->where('id_type_room', $id)
                 ->update([
                     'status' => 0
                 ]);
         } else {
-            $update = DB::table('type_room')
+            $update_type_room = DB::table('type_room')
                 ->where('id_type_room', $id)
                 ->update([
                     'status' => 1
+                ]);
+            $update_price_room = DB::table('price_room')
+                ->where('id_type_room', $id)
+                ->update([
+                    'status' => 1
+                ]);
+            $update_room = DB::table('rooms')
+                ->where('id_type_room', $id)
+                ->update([
+                    'status' => 5
                 ]);
         }
         echo json_encode($status);

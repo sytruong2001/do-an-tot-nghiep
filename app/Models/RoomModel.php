@@ -9,7 +9,7 @@ class RoomModel extends Model
 {
     public $timestamps = false;
     protected $fillable = [
-        "adults", "children", "id_type_room", "status"
+        "name", "adults", "children", "id_type_room", "status"
     ];
 
     protected $primaryKey = "id_room";

@@ -44,6 +44,6 @@ class User extends Authenticatable
     ];
     public function info_user()
     {
-        return $this->hasOne(InfoUser::class);
+        return $this->hasOne(InfoUserModel::class, "user_id");
     }
 }

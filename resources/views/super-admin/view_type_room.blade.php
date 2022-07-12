@@ -6,7 +6,7 @@
 
 @section('content')
     @if (session()->has('message'))
-        <div class="alert alert-success" id="alerts">
+        <div class="alert alert-danger" id="alerts">
             <button type="button" aria-hidden="true" class="close">×</button>
             {{ session()->get('message') }}
         </div>

@@ -11,14 +11,15 @@ class InfoUserModel extends Model
     protected $fillable = [
         'user_id',
         'phone',
-        'region',
-        'birth_of_date',
+        'address',
+        'date_of_birth',
+        'gender',
     ];
     protected $table    = 'info_user';
     public $timestamps  = false;
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, "user_id");
     }
 }

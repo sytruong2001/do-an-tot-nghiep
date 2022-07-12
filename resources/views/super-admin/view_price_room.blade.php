@@ -5,12 +5,9 @@
 
 
 @section('content')
-    @if (session()->has('message'))
-        <div class="alert alert-success" id="alerts">
-            <button type="button" aria-hidden="true" class="close">×</button>
-            {{ session()->get('message') }}
-        </div>
-    @endif
+    <div id="alerts">
+
+    </div>
     <div class="col-md-12">
 
         <div class="card">
@@ -151,11 +148,6 @@
 @endsection
 @push('js')
     <script>
-        window.setTimeout(function() {
-            $("#alerts").fadeTo(500, 0).slideUp(500, function() {
-                $(this).remove();
-            });
-        }, 3000);
         $(document).ready(function() {
             $('#datatable_price_room').DataTable({
                 "pagingType": "full_numbers",

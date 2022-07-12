@@ -9,107 +9,84 @@ $(document).ready(function () {
 function add() {
     $("#frm")[0].reset();
     $("#insertForm").modal("show");
-    $("#exampleModalLongTitle").html("Thêm mức giá phòng");
+    $("#exampleModalLongTitle").html("Thêm nhân viên");
     $("#button").html("Thêm");
-    var id = null;
-    $.ajax({
-        url: "/api/superadmin/get_price_room/" + id,
-        type: "get",
-        dataType: "json",
-        success: function (rs) {
-            console.log(rs);
-            $("#type_room").html("");
-            rs.forEach((data) => {
-                var html = `
-                    <option value="${data.id_type_room}">${data.name}</option>
-                `;
-                $("#type_room").append(html);
-            });
-        },
-    });
 }
-// function covertNumb(numb) {
-//     let num = new Intl.NumberFormat("vi", {
-//         style: "currency",
-//         currency: "VND",
-//     }).format(numb);
-//     console.log(num);
-// }
 function edit(id) {
     $.ajax({
-        url: "/api/superadmin/get_price_room/" + id,
+        url: "/api/superadmin/get_account/" + id,
         type: "get",
         dataType: "json",
         success: function (rs) {
-            var id_type_room, type_room, first_hour, next_hour;
-            rs.price.forEach((data) => {
-                type_room = data.type_room.name;
-                first_hour = data.first_hour;
-                next_hour = data.next_hour;
-                id_type_room = data.id_type_room;
+            var name, email, phone, dob, gender, address;
+            rs.forEach((data) => {
+                name = data.name;
+                email = data.email;
+                phone = data.info_user.phone;
+                gender = data.info_user.gender;
+                address = data.info_user.address;
+                dob = data.info_user.date_of_birth;
             });
             $("#insertForm").modal("show");
-            $("#exampleModalLongTitle").html("Cập nhật thông tin loại phòng");
-            $("#first_hour").val(first_hour);
-            $("#next_hour").val(next_hour);
-            $("#id_price_room").val(id);
+            $("#exampleModalLongTitle").html(
+                "Cập nhật thông tin loại nhân viên"
+            );
+            $("#name").val(name);
+            $("#email").val(email);
+            $("#address").val(address);
+            $("#phone").val(phone);
+            $("#birth_of_date").val(dob);
+            $("#id").val(id);
             $("#button").html("Cập nhật");
-            $("#type_room").html("");
-            rs.type.forEach((data1) => {
-                console.log(data1.name);
-                var html = ``;
-                html += `
-                    <option value="${data1.id_type_room}"
-                    `;
-                if (data1.id_type_room === id_type_room) {
-                    html += `selected`;
-                }
-                html += `
-                    >${data1.name}</option>
-                    `;
-                $("#type_room").append(html);
-            });
         },
     });
 }
 
 function save() {
-    var id_type_room = $("#type_room").val();
-    var first_hour = $("#first_hour").val();
-    var next_hour = $("#next_hour").val();
-    var id = $("#id_price_room").val();
-    // console.log(id);
-    // debugger;
+    var name = $("#name").val();
+    var email = $("#email").val();
+    var password = $("#password").val();
+    var phone = $("#phone").val();
+    var birth_of_date = $("#birth_of_date").val();
+    var address = $("#address").val();
+    var gender = $("#gender").val();
+    var id = $("#id").val();
     if (id == "") {
         $.ajax({
-            url: "/api/superadmin/create_price_room",
+            url: "/api/superadmin/create_account",
             type: "post",
             dataType: "json",
             data: {
-                id_type_room: id_type_room,
-                first_hour: first_hour,
-                next_hour: next_hour,
+                name: name,
+                email: email,
+                password: password,
+                phone: phone,
+                birth_of_date: birth_of_date,
+                address: address,
+                gender: gender,
             },
             success: function (data) {
                 if (data === 200) {
                     $("#frm")[0].reset();
                     onFinishWizard();
                 } else {
-                    $("#name_error").html(
-                        "Loại phòng bạn thêm đã có giá tiền từ trước"
-                    );
+                    $("#email_error").html("Địa chỉ email đã tồn tại");
                 }
             },
         });
     } else {
         $.ajax({
-            url: "/api/superadmin/update_price_room",
+            url: "/api/superadmin/update_account",
             type: "post",
             dataType: "json",
             data: {
-                id_type_room: id_type_room,
-                first_hour: first_hour,
-                next_hour: next_hour,
+                name: name,
+                email: email,
+                password: password,
+                phone: phone,
+                birth_of_date: birth_of_date,
+                address: address,
+                gender: gender,
                 id: id,
             },
             success: function (data) {

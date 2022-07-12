@@ -16,10 +16,11 @@ return new class extends Migration
         Schema::create('info_user', function (Blueprint $table) {
             $table->increments('id');
             $table->string('phone', 15)->nullable($value = true)->unique();
-            $table->string('region', 30)->nullable($value = true);
+            $table->string('address', 30)->nullable($value = true);
             $table->date('date_of_birth')->nullable($value = true);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->tinyInteger('gender');
         });
     }
 
