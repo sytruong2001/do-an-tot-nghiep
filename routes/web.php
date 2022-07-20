@@ -1,9 +1,15 @@
 <?php
 
+use App\Http\Controllers\Admin\checkinController;
+use App\Http\Controllers\Admin\checkoutController;
 use App\Http\Controllers\Api\AccountApi;
+use App\Http\Controllers\Api\additionalFeeApi;
+use App\Http\Controllers\Api\checkinApi;
+use App\Http\Controllers\Api\checkoutApi;
 use App\Http\Controllers\Api\priceRoomApi;
 use App\Http\Controllers\Api\typeRoomApi;
 use App\Http\Controllers\Api\RoomApi;
+use App\Http\Controllers\Api\servicesApi;
 use App\Http\Controllers\SuperAdmin\accountController;
 use App\Http\Controllers\SuperAdmin\priceRoomController;
 use App\Http\Controllers\SuperAdmin\revenueController;
@@ -23,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/dashboard', function () {
@@ -33,6 +39,8 @@ Route::get('/dashboard', function () {
 // dành cho quản lý
 Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(function () {
     Route::get('/', [typeRoomController::class, 'index'])->name('index');
+
+    Route::get('/info/{id}', [accountController::class, 'getInfo'])->name('superadmin.infoSuperAdmin');
 
     Route::controller(typeRoomController::class)->group(function () {
         Route::get('/type-room', 'index')->name('typeroom.index');
@@ -57,6 +65,19 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(func
 
 // dành cho nhân viên lễ tân
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/', [checkinController::class, 'index'])->name('index');
+
+    Route::get('/info/{id}', [accountController::class, 'getInfo'])->name('admin.infoAdmin');
+
+    Route::get('/detail-checkout/{id}', [checkoutController::class, 'getInfo'])->name('admin.getInfoCheckout');
+
+    Route::controller(checkinController::class)->group(function () {
+        Route::get('/checkin', 'index')->name('checkin.createCheckin');
+    });
+
+    Route::controller(checkoutController::class)->group(function () {
+        Route::get('/checkout', 'index')->name('checkout.createCheckout');
+    });
 });
 
 // api
@@ -85,6 +106,23 @@ Route::prefix('api')->group(function () {
         Route::post('/create_account', [AccountApi::class, 'create'])->name('account.createAccount');
         Route::post('/update_account', [AccountApi::class, 'update'])->name('account.updateAccount');
         Route::post('/lock_account/{id}', [AccountApi::class, 'lockOrUnlock'])->name('account.lockAccount');
+    });
+
+    Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+        Route::get('/get_room/{id}', [RoomApi::class, 'getinfo'])->name('typeroom.getRoom');
+
+        Route::post('/create_checkin', [checkinApi::class, 'create'])->name('checkin.createCheckin');
+        Route::get('/get_checkin/{id}', [checkoutApi::class, 'getInfo'])->name('checkout.getCheckin');
+
+        Route::get('/get_service/{id}', [servicesApi::class, 'getInfo'])->name('services.getService');
+        Route::post('/create_service', [servicesApi::class, 'create'])->name('services.createService');
+        Route::post('/update_service', [servicesApi::class, 'update'])->name('services.updateService');
+        Route::post('/delete_service/{id}', [servicesApi::class, 'destroy'])->name('services.deleteService');
+
+        Route::get('/get_additional_fee/{id}', [additionalFeeApi::class, 'getInfo'])->name('additionalFee.getadditionalFee');
+        Route::post('/create_additional_fee', [additionalFeeApi::class, 'create'])->name('additionalFee.createadditionalFee');
+        Route::post('/update_additional_fee', [additionalFeeApi::class, 'update'])->name('additionalFee.updateadditionalFee');
+        Route::post('/delete_additional_fee/{id}', [additionalFeeApi::class, 'destroy'])->name('additionalFee.deleteadditionalFee');
     });
 });
 require __DIR__ . '/auth.php';

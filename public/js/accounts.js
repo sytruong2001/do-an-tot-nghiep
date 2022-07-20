@@ -12,35 +12,35 @@ function add() {
     $("#exampleModalLongTitle").html("Thêm nhân viên");
     $("#button").html("Thêm");
 }
-function edit(id) {
-    $.ajax({
-        url: "/api/superadmin/get_account/" + id,
-        type: "get",
-        dataType: "json",
-        success: function (rs) {
-            var name, email, phone, dob, gender, address;
-            rs.forEach((data) => {
-                name = data.name;
-                email = data.email;
-                phone = data.info_user.phone;
-                gender = data.info_user.gender;
-                address = data.info_user.address;
-                dob = data.info_user.date_of_birth;
-            });
-            $("#insertForm").modal("show");
-            $("#exampleModalLongTitle").html(
-                "Cập nhật thông tin loại nhân viên"
-            );
-            $("#name").val(name);
-            $("#email").val(email);
-            $("#address").val(address);
-            $("#phone").val(phone);
-            $("#birth_of_date").val(dob);
-            $("#id").val(id);
-            $("#button").html("Cập nhật");
-        },
-    });
-}
+// function edit(id) {
+//     $.ajax({
+//         url: "/api/superadmin/get_account/" + id,
+//         type: "get",
+//         dataType: "json",
+//         success: function (rs) {
+//             var name, email, phone, dob, gender, address;
+//             rs.forEach((data) => {
+//                 name = data.name;
+//                 email = data.email;
+//                 phone = data.info_user.phone;
+//                 gender = data.info_user.gender;
+//                 address = data.info_user.address;
+//                 dob = data.info_user.date_of_birth;
+//             });
+//             $("#insertForm").modal("show");
+//             $("#exampleModalLongTitle").html(
+//                 "Cập nhật thông tin loại nhân viên"
+//             );
+//             $("#name").val(name);
+//             $("#email").val(email);
+//             $("#address").val(address);
+//             $("#phone").val(phone);
+//             $("#birth_of_date").val(dob);
+//             $("#id").val(id);
+//             $("#button").html("Cập nhật");
+//         },
+//     });
+// }
 
 function save() {
     var name = $("#name").val();
@@ -49,8 +49,9 @@ function save() {
     var phone = $("#phone").val();
     var birth_of_date = $("#birth_of_date").val();
     var address = $("#address").val();
-    var gender = $("#gender").val();
     var id = $("#id").val();
+    var gender = $('input[type="radio"]:checked').val();
+
     if (id == "") {
         $.ajax({
             url: "/api/superadmin/create_account",
@@ -102,7 +103,7 @@ function save() {
 function lock(id) {
     $("#insertForm").modal("show");
     $("#exampleModalLongTitle").html("Xác nhận");
-    $(".modal-body").html("Bạn có chắc chắn muốn khóa?");
+    $(".modal-body").html("Bạn có chắc chắn muốn khóa nhân viên này không?");
     $(".modal-footer").empty();
     var btn = `
             <button type="submit" class="btn btn-primary" id="confirm">Đồng ý</button>

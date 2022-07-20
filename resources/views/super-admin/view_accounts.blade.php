@@ -101,9 +101,9 @@
                                         </div>
                                     </td>
                                     <td class="text-right" style="text-align: center;">
-                                        <button type="button" class="btn btn-info btn-warning btn-icon edit"
+                                        {{-- <button type="button" class="btn btn-info btn-warning btn-icon edit"
                                             data-toggle="modal" onclick="edit({{ $data->user_id }})"><i
-                                                class="fa fa-file-text-o"></i></button>
+                                                class="fa fa-file-text-o"></i></button> --}}
                                         @if ($data->status == 0)
                                             <button class="btn btn-danger lock" onclick="lock({{ $data->user_id }})"
                                                 style="height: 38px; width: 38px; padding: 0 8px 0 8px"><i
@@ -174,11 +174,11 @@
                                                     <label>Giới tính:</label>
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <input type="radio" id="gender" name="gender"
+                                                            <input type="radio" id="gender1" name="gender"
                                                                 value="0">Nam
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <input type="radio" id="gender" name="gender"
+                                                            <input type="radio" id="gender2" name="gender"
                                                                 value="1">Nữ
                                                         </div>
 

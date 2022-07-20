@@ -9,7 +9,7 @@ class ServicesModel extends Model
 {
     public $timestamps = false;
     protected $fillable = [
-        "name", "amount", "price", "id_checkin_room"
+        "name", "amount", "price", "id_checkin_room", 'status',
     ];
 
     protected $primaryKey = "id_service";

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('price');
             $table->unsignedBigInteger('id_checkin_room');
             $table->foreign('id_checkin_room')->references('id_checkin_room')->on('checkin');
+            $table->tinyInteger('status');
         });
     }
 
