@@ -193,6 +193,7 @@ function create(id) {
                         success: function (data) {
                             if (data.code == 200) {
                                 onFinishWizard();
+                                setTimeout("location.reload(true);", 500);
                             } else {
                                 $("#insertForm").modal("show");
                                 $("#exampleModalLongTitle").html("Xảy ra lỗi");

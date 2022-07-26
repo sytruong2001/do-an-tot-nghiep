@@ -10,7 +10,7 @@ function addAdditionalFee(id) {
     $("#frm-additional-fee")[0].reset();
     $("#insertForm-additional-fee").modal("show");
     $("#exampleModalLongTitle-additional-fee").html("Thêm phụ phí tổn thất");
-    $("#button").html("Thêm");
+    $("#btn-additional-fee").html("Thêm");
     $("#id-checkin-room").val(id);
 }
 function editAdditionalFee(id) {
@@ -33,7 +33,7 @@ function editAdditionalFee(id) {
             $("#amount-prod").val(amount);
             $("#price-prod").val(price);
             $("#id-additional-fee").val(id);
-            $("#button").html("Cập nhật");
+            $("#btn-additional-fee").html("Cập nhật");
         },
     });
 }

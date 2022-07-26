@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\InfoUserModel;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -54,6 +55,8 @@ class AccountApi extends Controller
             echo json_encode(201);
         }
     }
+
+    // chưa sử dụng
     public function update(Request $request)
     {
         $id_type_room = $request->get('id_type_room');
@@ -71,40 +74,110 @@ class AccountApi extends Controller
             ]);
         echo json_encode(200);
     }
+
+    function changeInfo(Request $request)
+    {
+
+        $validator = \Validator::make($request->all(), [
+            'name' => 'required',
+            'phone' => ['required', 'min:10', 'max:10'],
+        ], [
+            'phone.required' => 'Số điện thoại không được để trống',
+            'phone.min' => 'Số điện thoại phải đủ 10 chữ số',
+            'phone.max' => 'Số điện thoại phải đủ 10 chữ số',
+        ]);
+
+        if (!$validator->passes()) {
+            return response()->json(['status' => 0, 'error' => $validator->errors()->toArray()]);
+        } else {
+            $query = User::find(Auth::user()->id)->update([
+                'name' => $request->name,
+            ]);
+            $check = InfoUserModel::query()->where('user_id', Auth::user()->id)->count();
+            if ($check == 0) {
+                $info_user = InfoUserModel::query()->create([
+                    'phone' => $request->phone,
+                    'address' => $request->address,
+                    'date_of_birth' => $request->date_of_birth,
+                    'gender' => $request->gender,
+                    'user_id' => Auth::user()->id,
+                ]);
+            } else {
+                $info_user = InfoUserModel::query()->where('user_id', Auth::user()->id)->update([
+                    'phone' => $request->phone,
+                    'address' => $request->address,
+                    'date_of_birth' => $request->date_of_birth,
+                    'gender' => $request->gender,
+                ]);
+            }
+
+
+            if (!$query && !$info_user) {
+                return response()->json(['status' => 0, 'msg' => 'Lỗi.']);
+            } else {
+                return response()->json(['status' => 1, 'msg' => 'Sửa thành công.']);
+            }
+        }
+    }
+    public function changePassword(Request $request)
+    {
+        //Validate form
+
+        $validator = \Validator::make($request->all(), [
+            'old_pass' => [
+                'required', function ($attribute, $value, $fail) {
+                    if (!Hash::check($value, Auth::user()->password)) {
+                        return $fail(__('Mật khẩu không đúng'));
+                    }
+                },
+                'min:7',
+                'max:30'
+            ],
+            'new_pass' => 'required|min:7|max:30',
+            're_new_pass' => 'required|same:new_pass'
+        ], [
+            'old_pass.required' => 'Nhập mật khẩu hiện tại',
+            'old_pass.min' => 'Mật khẩu yêu cầu 8 ký tự trở lên',
+            'new_pass.required' => 'Nhập mật khẩu mới',
+            'new_pass.min' => 'Mật khẩu yêu cầu 8 ký tự trở lên',
+            're_new_pass.required' => 'Xác nhận mật khẩu mới',
+            're_new_pass.same' => 'Mật khẩu không khớp với mật khẩu mới'
+        ]);
+        if (!$validator->passes()) {
+
+            return response()->json(['status' => 0, 'error' => $validator->errors()->toArray()]);
+        } else {
+
+            $update = User::find(Auth::user()->id)->update(['password' => \Hash::make($request->new_pass)]);
+
+            if (!$update) {
+                return response()->json(['status' => 0, 'msg' => 'Đổi mật khẩu thất bại']);
+            } else {
+                return response()->json(['status' => 1, 'msg' => 'Đổi mật khẩu thành công']);
+            }
+        }
+    }
+
     public function lockOrUnlock($id)
     {
         // xem trạng thái hoạt động của bảng phòng theo id
-        $check = DB::table('rooms')->where('id_room', $id)->select('status')->first();
-        $status = $check->status;
-        // xem trạng thái hoạt động của loại phòng theo id từ bảng giá phòng
-        $get_id_type_room = DB::table('rooms')->where('id_room', $id)->select('id_type_room')->first();
-        $id_type_room = $get_id_type_room->id_type_room;
-        $check_type_room_status = DB::table('type_room')->where('id_type_room', $id_type_room)->select('status')->first();
-        $type_room_status = $check_type_room_status->status;
-        $get_type_room = DB::table('type_room')->where('id_type_room', $id_type_room)->select('name')->first();
-        $type_room = $get_type_room->name;
+        $check = DB::table('model_has_roles')->where('model_id', $id)->select('role_id')->first();
+        $role = $check->role_id;
 
-        if ($type_room_status == 0) {
-            if ($status == 5) {
-                $update = DB::table('rooms')
-                    ->where('id_room', $id)
-                    ->update([
-                        'status' => 0
-                    ]);
-            } else {
-                $update = DB::table('rooms')
-                    ->where('id_room', $id)
-                    ->update([
-                        'status' => 5
-                    ]);
-            }
-            $json['code'] = 200;
-            echo json_encode($json);
+        if ($role == 2) {
+            $update = DB::table("model_has_roles")
+                ->where('model_id', $id)
+                ->update([
+                    'role_id' => 3,
+                ]);
         } else {
-            $error = "Thao tác này không thể thực hiện vì loại phòng '" . $type_room . "' hiện đang không có";
-            $json['code'] = 201;
-            $json['error'] = $error;
-            echo json_encode($json);
+            $update = DB::table("model_has_roles")
+                ->where('model_id', $id)
+                ->update([
+                    'role_id' => 2,
+                ]);
         }
+        $json['code'] = 200;
+        echo json_encode($json);
     }
 }

@@ -15,16 +15,17 @@
                 </div>
                 <div class="content">
                     <div class="row">
-                        <div class="col-md-12">
-                            <select name="idClass" class="form-control">
-                                <option style="text-align: center" value="">--------------------</option>
-                                <option style="text-align: center" value="">--------------------</option>
-                                <option style="text-align: center" value="">--------------------</option>
-                                <option style="text-align: center" value="">--------------------</option>
-                                <option style="text-align: center" value="">--------------------</option>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" value=""
+                                placeholder="Nhập tên phòng bạn muốn tìm">
+                        </div>
+                        <div class="col-md-6">
+                            <select name="idClass" class="form-control" onclick="alert('ahihi')">
+                                <option style="text-align: center" value="">Phòng hôm nay cần trả</option>
                             </select>
                         </div>
-                        <hr>
+                        <hr style="border: none">
+                        <hr style="border: none">
                     </div>
                     <div class="row">
                         @foreach ($rooms as $data)
@@ -73,8 +74,4 @@
             </div>
         </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script language="javascript" src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
-    <script src="js/checkout.js"></script>
 @endsection

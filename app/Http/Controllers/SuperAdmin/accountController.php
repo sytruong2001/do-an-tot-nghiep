@@ -16,9 +16,14 @@ class accountController extends Controller
             ->join('info_user', 'users.id', '=', 'info_user.user_id')
             ->where('model_has_roles.role_id', '=', 2)
             ->get();
-        // dd($get_user);
+        $get_user_locked = User::query()
+            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->join('info_user', 'users.id', '=', 'info_user.user_id')
+            ->where('model_has_roles.role_id', '=', 3)
+            ->get();
         return view('super-admin.view_accounts', [
             'accounts_user' => $get_user,
+            'accounts_user_loced' => $get_user_locked,
             'index' => 1,
         ]);
     }

@@ -9,21 +9,154 @@ $(document).ready(function () {
 function create(id) {
     var x;
     let currentDate = new Date();
-    let cDay = currentDate.getDate();
+    let currentTime = convertTime(currentDate);
+
+    $("#frm-checkout")[0].reset();
+    $("#insertForm-checkout").modal("show");
+    $("#exampleModalLongTitle").html("Xác nhận thanh toán trả phòng");
+    $("#id-checkin-room").val(id);
+    $.ajax({
+        url: "/api/admin/get_checkin/" + id,
+        type: "get",
+        dataType: "json",
+        success: function (rs) {
+            console.log(rs);
+            let total = 0;
+            let time_start;
+            rs.checkin.forEach((data_checkin) => {
+                $("#name-room").val(data_checkin.name);
+                $("#time-start").val(data_checkin.time_start);
+                $("#time-end").val(currentTime);
+                time_start = data_checkin.time_start;
+            });
+            // 2022-07-25 20:20:00
+            let time = new Date(time_start);
+            let total_time = (
+                Number(currentDate) / (1000 * 60 * 60) -
+                Number(time) / (1000 * 60 * 60)
+            ).toFixed(2);
+            console.log(total_time);
+            // số tiền thuê phòng
+            rs.price_hour.forEach((data_price_hour) => {
+                var first_hour, next_hour;
+                if (total_time <= 1) {
+                    first_hour = convertMoney(
+                        data_price_hour.first_hour * total_time
+                    );
+                    var html_price_room = `
+                    <label>Giá phòng:</label>
+                    <input type="text" class="form-control" id="price-room" name="price-room"
+                        style="text-align:right"
+                        value="${first_hour}" disabled>`;
+                    $("#all-price-room").html(html_price_room);
+                    total += Number(data_price_hour.first_hour * total_time);
+                    console.log(total);
+                } else {
+                    first_hour = convertMoney(data_price_hour.first_hour);
+                    next_hour = convertMoney(
+                        data_price_hour.next_hour * (total_time - 1)
+                    );
+                    var html_price_room = `
+                    <label>Giá phòng:</label>
+                    <input type="text" class="form-control" id="price-room" name="price-room"
+                        style="text-align:right"
+                        value="Giờ đầu:${first_hour} ---- ${
+                        total_time - 1
+                    } giờ tiếp theo: ${next_hour}" disabled>`;
+                    $("#all-price-room").html(html_price_room);
+                    total += Number(
+                        data_price_hour.first_hour +
+                            data_price_hour.next_hour * (total_time - 1)
+                    );
+                }
+            });
+            // số tiền phụ phí
+            rs.price_additional_fee.forEach((data_additional_fee) => {
+                var price_additional_fee = convertMoney(
+                    data_additional_fee.price_additional_fee
+                );
+                var html_additional_fee = `
+                    <label>Phí tổn thất:</label>
+                    <input type="text" class="form-control" id="price-all-additional-fee" name="price-all-additional-fee"
+                        style="text-align:right"
+                        value="${price_additional_fee}" disabled>`;
+                $("#all-additional-fee").html(html_additional_fee);
+                total += Number(data_additional_fee.price_additional_fee);
+            });
+            // số tiền dịch vụ
+            rs.price_services.forEach((data_services) => {
+                var price_services = convertMoney(data_services.price_services);
+                var html_services = `
+                    <label>Phí dịch vụ:</label>
+                    <input type="text" class="form-control" id="price-all-services" name="price-all-services"
+                        style="text-align:right"
+                        value="${price_services}" disabled>
+                    </input>`;
+                $("#all-services").html(html_services);
+                total += Number(data_services.price_services);
+            });
+            // tổng số tiền thanh toán
+            var total_price = convertMoney(total);
+            var html_total_price = `
+                    <label>Tổng tiền:</label>
+                    <input type="text" class="form-control" id="total-price" name="total-price" style="color:green; text-align:right" value="${total_price}" disabled>
+                    </input>`;
+            $("#total-price").html(html_total_price);
+
+            // xác nhận
+            $(".modal-footer").empty();
+            var btn = `
+            <button type="button" class="btn btn-secondary" id="close-additional-fee"
+                        data-dismiss="modal">Đóng</button>
+            <button type="submit" class="btn btn-primary" id="btn-checkout">Xác nhận</button>
+            `;
+            $(".modal-footer").append(btn);
+            $("button#btn-checkout").on("click", function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "/api/admin/create_checkout",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        id_checkin_room: id,
+                        time_start: time_start,
+                        time_end: currentTime,
+                        sum_price: Number(total),
+                    },
+                    success: function (rs) {
+                        onFinishWizard();
+                        setTimeout("location.reload(true);", 500);
+                    },
+                });
+            });
+        },
+    });
+}
+
+function convertMoney(number) {
+    let num = new Intl.NumberFormat("vi", {
+        style: "currency",
+        currency: "VND",
+    }).format(number);
+    return num;
+}
+
+function convertTime(time) {
+    let cDay = time.getDate();
     if (cDay >= 10) {
         cDay = cDay;
     } else {
         cDay = "0" + cDay;
     }
-    let cMonth = currentDate.getMonth() + 1;
-    let cYear = currentDate.getFullYear();
-    let cHour = currentDate.getHours();
+    let cMonth = time.getMonth() + 1;
+    let cYear = time.getFullYear();
+    let cHour = time.getHours();
     if (cHour >= 10) {
         cHour = cHour;
     } else {
         cHour = "0" + cHour;
     }
-    let cMinute = currentDate.getMinutes();
+    let cMinute = time.getMinutes();
     if (cMinute >= 10) {
         cMinute = cMinute;
     } else {
@@ -32,273 +165,70 @@ function create(id) {
     let cTime = cHour + ":" + cMinute;
     let currentTime;
     if (cMonth < 10) {
-        currentTime = cYear + "-0" + cMonth + "-" + cDay + "T" + cTime;
+        currentTime = cYear + "-0" + cMonth + "-" + cDay + " " + cTime;
     } else {
-        currentTime = cYear + "-" + cMonth + "-" + cDay + "T" + cTime;
+        currentTime = cYear + "-" + cMonth + "-" + cDay + " " + cTime;
     }
-
-    $.ajax({
-        url: "/api/admin/get_checkin/" + id,
-        type: "get",
-        dataType: "json",
-        success: function (rs) {
-            console.log(rs.checkin);
-            var html = ``;
-            rs.checkin.forEach((data_checkin) => {
-                html += `
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                    <form id="frm">
-                        <div class="content content-full-width">
-                            <ul role="tablist" class="nav nav-tabs">
-                                <li role="presentation" class="active">
-                                    <a href="#icon-info" data-toggle="tab"><i class="fa fa-info"></i> Thông tin thời gian thuê phòng</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content">
-                                <div id="icon-info" class="tab-pane active">
-                                    <div class="card">
-                                        <div class="content">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Số phòng:</label>
-                                                    <input type="text" class="form-control" id="time_start"
-                                                        name="time_start" value="${data_checkin.time_start}" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Thời gian bắt đầu</label>
-                                                    <input type="datetime-local" class="form-control" id="time_start"
-                                                        name="time_start" value="${data_checkin.time_start}" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>Thời gian kết thúc</label>
-                                                    <input type="datetime-local" class="form-control" id="time_end"
-                                                        name="time_end" value="${currentTime}" readonly>
-                                                    <span class="text-danger error-text time_end_error"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="content content-full-width">
-                            <ul role="tablist" class="nav nav-tabs">
-                                <li role="presentation" class="active">
-                                    <a href="#icon-info" data-toggle="tab"><i class="fa fa-user"></i> Thông tin khách hàng</a>
-                                </li>
-
-                            </ul>
-
-                            <div class="tab-content">
-                                <div id="icon-info" class="tab-pane active">
-                                    <div class="card">
-                                        <div class="content"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-primary" id="btn-submit">Xác nhận</button>
-                        </div>
-                    </form>
-                    </div>
-                </div>
-            </div>
-    `;
-                $(".content").html(html);
-            });
-
-            $("#frm").on("submit", function (e) {
-                e.preventDefault();
-                var time_end = $("#time_end").val();
-                var name_1 = $("#name1").val();
-                var identify_1 = $("#identify1").val();
-                $("span.time_end_error").empty();
-                $("span.name_error_1").empty();
-                $("span.identify_error_1").empty();
-                if (time_end === "") {
-                    $("span.time_end_error").html(
-                        "Chưa nhập thời gian trả phòng."
-                    );
-                }
-                if (name_1 === "") {
-                    $("span.name_error_1").html(
-                        "Chưa điền tên người nhận phòng."
-                    );
-                }
-                if (identify_1 === "") {
-                    $("span.identify_error_1").html(
-                        "Chưa điền số CMT/CCCD người nhận phòng."
-                    );
-                }
-                if (time_end != "" && name_1 != "" && identify_1 != "") {
-                    $.ajax({
-                        url: "/api/admin/create_checkin",
-                        type: "post",
-                        data: new FormData(this),
-                        processData: false,
-                        dataType: "json",
-                        contentType: false,
-                        beforeSend: function () {
-                            $(document).find("span.error-text").text("");
-                        },
-                        success: function (data) {
-                            if (data.code == 200) {
-                                onFinishWizard();
-                            } else {
-                                $("#insertForm").modal("show");
-                                $("#exampleModalLongTitle").html("Xảy ra lỗi");
-                                $(".modal-body").html(data.error);
-                            }
-                        },
-                    });
-                }
-            });
-        },
-    });
-}
-function edit(id) {
-    $.ajax({
-        url: "/api/superadmin/get_account/" + id,
-        type: "get",
-        dataType: "json",
-        success: function (rs) {},
-    });
+    return currentTime;
 }
 
-function save() {
-    var name = $("#name").val();
-    var email = $("#email").val();
-    var password = $("#password").val();
-    var phone = $("#phone").val();
-    var birth_of_date = $("#birth_of_date").val();
-    var address = $("#address").val();
-    var gender = $("#gender").val();
-    var id = $("#id").val();
-    // if (id == "") {
-    //     $.ajax({
-    //         url: "/api/superadmin/create_account",
-    //         type: "post",
-    //         dataType: "json",
-    //         data: {
-    //             name: name,
-    //             email: email,
-    //             password: password,
-    //             phone: phone,
-    //             birth_of_date: birth_of_date,
-    //             address: address,
-    //             gender: gender,
-    //         },
-    //         success: function (data) {
-    //             if (data === 200) {
-    //                 $("#frm")[0].reset();
-    //                 onFinishWizard();
-    //             } else {
-    //                 $("#email_error").html("Địa chỉ email đã tồn tại");
-    //             }
-    //         },
-    //     });
-    // } else {
-    //     $.ajax({
-    //         url: "/api/superadmin/update_account",
-    //         type: "post",
-    //         dataType: "json",
-    //         data: {
-    //             name: name,
-    //             email: email,
-    //             password: password,
-    //             phone: phone,
-    //             birth_of_date: birth_of_date,
-    //             address: address,
-    //             gender: gender,
-    //             id: id,
-    //         },
-    //         success: function (data) {
-    //             if (data === 200) {
-    //                 $("#frm")[0].reset();
-    //                 onFinishWizard();
-    //             }
-    //         },
-    //     });
-    // }
-}
+// function saveCheckout() {
+// var name = $("#name").val();
+// var email = $("#email").val();
+// var password = $("#password").val();
+// var phone = $("#phone").val();
+// var birth_of_date = $("#birth_of_date").val();
+// var address = $("#address").val();
+// var gender = $("#gender").val();
+// var id = $("#id").val();
+// if (id == "") {
+//     $.ajax({
+//         url: "/api/superadmin/create_account",
+//         type: "post",
+//         dataType: "json",
+//         data: {
+//             name: name,
+//             email: email,
+//             password: password,
+//             phone: phone,
+//             birth_of_date: birth_of_date,
+//             address: address,
+//             gender: gender,
+//         },
+//         success: function (data) {
+//             if (data === 200) {
+//                 $("#frm")[0].reset();
+//                 onFinishWizard();
+//             } else {
+//                 $("#email_error").html("Địa chỉ email đã tồn tại");
+//             }
+//         },
+//     });
+// } else {
+//     $.ajax({
+//         url: "/api/superadmin/update_account",
+//         type: "post",
+//         dataType: "json",
+//         data: {
+//             name: name,
+//             email: email,
+//             password: password,
+//             phone: phone,
+//             birth_of_date: birth_of_date,
+//             address: address,
+//             gender: gender,
+//             id: id,
+//         },
+//         success: function (data) {
+//             if (data === 200) {
+//                 $("#frm")[0].reset();
+//                 onFinishWizard();
+//             }
+//         },
+//     });
+// }
+// }
 
-function lock(id) {
-    $("#insertForm").modal("show");
-    $("#exampleModalLongTitle").html("Xác nhận");
-    $(".modal-body").html("Bạn có chắc chắn muốn khóa?");
-    $(".modal-footer").empty();
-    var btn = `
-            <button type="submit" class="btn btn-primary" id="confirm">Đồng ý</button>
-            `;
-    $(".modal-footer").append(btn);
-    $("button#confirm").on("click", function () {
-        $.ajax({
-            url: "/api/superadmin/lock_price_room/" + id,
-            type: "post",
-            dataType: "json",
-            success: function (rs) {
-                if (rs.code === 200) {
-                    onFinishWizard();
-                } else if (rs.code === 201) {
-                    console.log(rs.error);
-                    // alert(rs.error);
-                    debugger;
-                }
-            },
-        });
-    });
-}
-function unlock(id) {
-    $("#insertForm").modal("show");
-    $("#exampleModalLongTitle").html("Xác nhận");
-    $(".modal-body").html("Bạn có chắc chắn muốn mở khóa?");
-    $(".modal-footer").empty();
-    var btn = `
-            <button type="submit" class="btn btn-primary" id="confirm">Đồng ý</button>
-            `;
-    $(".modal-footer").append(btn);
-    $("button#confirm").on("click", function () {
-        $.ajax({
-            url: "/api/superadmin/lock_price_room/" + id,
-            type: "post",
-            dataType: "json",
-            success: function (rs) {
-                if (rs.code === 200) {
-                    onFinishWizard();
-                } else if (rs.code === 201) {
-                    $("#insertForm").modal("hide");
-                    alertMessage(rs.error);
-                }
-            },
-        });
-    });
-}
-
-function alertMessage(message) {
-    var html = `
-        <div class="alert alert-danger">
-            <button type="button" aria-hidden="true" class="close">×</button>
-            <span>${message}</span>
-        </div>
-    `;
-    $("#alerts").append(html);
-}
 function onFinishWizard() {
     swal("Hoàn tất!", "Thành công", "success");
 }

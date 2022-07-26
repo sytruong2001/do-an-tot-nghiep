@@ -126,6 +126,55 @@ function save() {
     }
 }
 
+function clean(id) {
+    $("#insertForm").modal("show");
+    $("#exampleModalLongTitle").html("Xác nhận");
+    $(".modal-body").html("Đã dọn dẹp phòng");
+    $(".modal-footer").empty();
+    var btn = `
+            <button type="button" class="btn btn-secondary" id="close-additional-fee"
+                        data-dismiss="modal">Đóng</button>
+            <button type="submit" class="btn btn-primary" id="confirm">Xác nhận</button>
+            `;
+    $(".modal-footer").append(btn);
+    $("button#confirm").on("click", function () {
+        $.ajax({
+            url: "/api/admin/clean/" + id,
+            type: "post",
+            dataType: "json",
+            success: function (rs) {
+                onFinishWizard();
+                setTimeout("location.reload(true);", 500);
+            },
+        });
+    });
+}
+
+function fix(id) {
+    $("#insertForm").modal("show");
+    $("#exampleModalLongTitle").html("Xác nhận");
+    $(".modal-body").html("Đã sửa chữa phòng");
+    $(".modal-footer").empty();
+    var btn = `
+            <button type="button" class="btn btn-secondary" id="close-additional-fee"
+                        data-dismiss="modal">Đóng</button>
+            <button type="submit" class="btn btn-primary" id="confirm">Xác nhận</button>
+            `;
+    $(".modal-footer").append(btn);
+    $("button#confirm").on("click", function () {
+        $.ajax({
+            url: "/api/admin/clean/" + id,
+            type: "post",
+            dataType: "json",
+            success: function (rs) {
+                onFinishWizard();
+                setTimeout("location.reload(true);", 500);
+                // location.reload(true);
+            },
+        });
+    });
+}
+
 function lock(id) {
     $("#insertForm").modal("show");
     $("#exampleModalLongTitle").html("Xác nhận");

@@ -19,4 +19,11 @@ class RoomController extends Controller
             'index' => 1,
         ]);
     }
+    public function getRoom()
+    {
+        $data = RoomModel::query()
+            ->whereBetween('status', [2, 3])
+            ->get();
+        return view('admin.view_clean_room', ['rooms' => $data]);
+    }
 }

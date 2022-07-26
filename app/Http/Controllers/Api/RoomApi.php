@@ -97,4 +97,14 @@ class RoomApi extends Controller
             echo json_encode($json);
         }
     }
+
+    public function clean($id)
+    {
+        $update = DB::table('rooms')
+            ->where('id_room', $id)
+            ->update([
+                'status' => 0,
+            ]);
+        echo json_encode(200);
+    }
 }

@@ -94,7 +94,8 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary" onclick="saveService()">Thêm</button>
+                    <button type="submit" class="btn btn-primary" onclick="saveService()"
+                        id="btn-services">Thêm</button>
                 </div>
             </form>
         </div>

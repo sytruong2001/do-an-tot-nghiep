@@ -34,18 +34,6 @@
                                 <th class="disabled-sorting text-right" style="text-align: center;">Thao tác</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <th>#</th>
-                                <th>Tên</th>
-                                <th>Ngày sinh</th>
-                                <th>Giới tính</th>
-                                <th>Email</th>
-                                <th>Số điện thoại</th>
-                                <th>Địa chỉ</th>
-                                <th class="text-right" style="text-align: center;">Thao tác</th>
-                            </tr>
-                        </tfoot>
                         <tbody>
                             @foreach ($accounts_user as $data)
                                 <tr>
@@ -101,18 +89,96 @@
                                         </div>
                                     </td>
                                     <td class="text-right" style="text-align: center;">
-                                        {{-- <button type="button" class="btn btn-info btn-warning btn-icon edit"
-                                            data-toggle="modal" onclick="edit({{ $data->user_id }})"><i
-                                                class="fa fa-file-text-o"></i></button> --}}
-                                        @if ($data->status == 0)
-                                            <button class="btn btn-danger lock" onclick="lock({{ $data->user_id }})"
-                                                style="height: 38px; width: 38px; padding: 0 8px 0 8px"><i
-                                                    class="fa fa-lock"></i></button>
-                                        @else
-                                            <button class="btn btn-success lock" onclick="unlock({{ $data->user_id }})"
-                                                style="height: 38px; width: 38px; padding: 0 8px 0 8px"><i
-                                                    class="fa fa-unlock"></i></button>
-                                        @endif
+                                        <button class="btn btn-danger lock" onclick="lock({{ $data->user_id }})"
+                                            style="height: 38px; width: 38px; padding: 0 8px 0 8px"><i
+                                                class="fa fa-lock"></i></button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> <!-- end card -->
+        <div class="card">
+            <div class="header">
+                <legend>Danh sách nhân viên đang bị khóa</legend>
+            </div>
+            <div class="content">
+                <div class="fresh-datatables">
+                    <table id="datatable_account_locked" class="table table-striped table-no-bordered table-hover"
+                        cellspacing="0" width="100%" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Tên</th>
+                                <th>Ngày sinh</th>
+                                <th>Giới tính</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Địa chỉ</th>
+                                <th class="disabled-sorting text-right" style="text-align: center;">Thao tác</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach ($accounts_user_loced as $data)
+                                <tr>
+                                    <td>
+                                        <div style=' height: 100px; overflow: auto;'>
+                                            {{ $index++ }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style=' height: 100px; overflow: auto;'>
+                                            {{ $data->name }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style=' height: 100px; overflow: auto;'>
+                                            @if ($data->date_of_birth == null)
+                                                <i>(Chưa có thông tin)</i>
+                                            @else
+                                                {{ $data->date_of_birth }}
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style=' height: 100px; overflow: auto;'>
+                                            @if ($data->gender == 0)
+                                                Nam
+                                            @elseif($data->gender == 1)
+                                                Nữ
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style=' height: 100px; overflow: auto;'>
+                                            {{ $data->email }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style=' height: 100px; overflow: auto;'>
+                                            @if ($data->phone == null)
+                                                <i>(Chưa có thông tin)</i>
+                                            @else
+                                                {{ $data->phone }}
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style=' height: 100px; overflow: auto;'>
+                                            @if ($data->address == null)
+                                                <i>(Chưa có thông tin)</i>
+                                            @else
+                                                {{ $data->address }}
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="text-right" style="text-align: center;">
+                                        <button class="btn btn-success lock" onclick="unlock({{ $data->user_id }})"
+                                            style="height: 38px; width: 38px; padding: 0 8px 0 8px"><i
+                                                class="fa fa-unlock"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -204,13 +270,13 @@
                                         </div>
 
                                     </div>
+                                </div>
 
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Đóng</button>
-                                        <button type="submit" class="btn btn-primary" onclick="save()"
-                                            id="button"></button>
-                                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                                    <button type="submit" class="btn btn-primary" onclick="save()"
+                                        id="button"></button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -233,6 +299,21 @@
         }, 3000);
         $(document).ready(function() {
             $('#datatable_account').DataTable({
+                "pagingType": "full_numbers",
+                "lengthMenu": [
+                    [5, 10, 25, 50, -1],
+                    [5, 10, 25, 50, "Tất cả"]
+                ],
+                responsive: true,
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Tìm kiếm phòng",
+                }
+
+            });
+        });
+        $(document).ready(function() {
+            $('#datatable_account_locked').DataTable({
                 "pagingType": "full_numbers",
                 "lengthMenu": [
                     [5, 10, 25, 50, -1],

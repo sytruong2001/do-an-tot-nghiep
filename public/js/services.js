@@ -10,7 +10,7 @@ function addService(id) {
     $("#frm-services")[0].reset();
     $("#insertForm-services").modal("show");
     $("#exampleModalLongTitle").html("Thêm dịch vụ");
-    $("#button").html("Thêm");
+    $("#btn-services").html("Thêm");
     $("#id-checkin-room").val(id);
 }
 function editService(id) {
@@ -33,7 +33,7 @@ function editService(id) {
             $("#amount-service").val(amount);
             $("#price-service").val(price);
             $("#id-service").val(id);
-            $("#button").html("Cập nhật");
+            $("#btn-services").html("Cập nhật");
         },
     });
 }

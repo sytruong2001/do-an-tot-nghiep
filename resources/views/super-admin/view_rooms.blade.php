@@ -82,14 +82,14 @@
                                         <button type="button" class="btn btn-info btn-warning btn-icon edit"
                                             data-toggle="modal" onclick="edit({{ $data->id_room }})"><i
                                                 class="fa fa-file-text-o"></i></button>
-                                        @if ($data->status == 0)
-                                            <button class="btn btn-danger lock" onclick="lock({{ $data->id_room }})"
-                                                style="height: 38px; width: 38px; padding: 0 8px 0 8px"><i
-                                                    class="fa fa-lock"></i></button>
-                                        @else
+                                        @if ($data->status == 5)
                                             <button class="btn btn-success lock" onclick="unlock({{ $data->id_room }})"
                                                 style="height: 38px; width: 38px; padding: 0 8px 0 8px"><i
                                                     class="fa fa-unlock"></i></button>
+                                        @else
+                                            <button class="btn btn-danger lock" onclick="lock({{ $data->id_room }})"
+                                                style="height: 38px; width: 38px; padding: 0 8px 0 8px"><i
+                                                    class="fa fa-lock"></i></button>
                                         @endif
                                     </td>
                                 </tr>

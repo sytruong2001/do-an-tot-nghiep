@@ -11,34 +11,40 @@
 
             <div class="card">
                 <div class="header">
-                    <legend>Quản lý nhận phòng</legend>
+                    <legend>Quản lý nhận phòng cần dọn dẹp & sửa chữa</legend>
                 </div>
                 <div class="content">
                     <div class="row">
-                        <div class="col-md-4">
-                            <select name="idClass" class="form-control" id="search">
-                                <option style="text-align: center" value="">Chọn loại phòng
-                                </option>
-                                <option style="text-align: center" value="">--------------------</option>
-                                <option style="text-align: center" value="">--------------------</option>
-                                <option style="text-align: center" value="">--------------------</option>
-                                <option style="text-align: center" value="">--------------------</option>
-                            </select>
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" value=""
+                                placeholder="Nhập tên phòng bạn muốn tìm">
                         </div>
-                        <hr style="border: none">
                         <hr style="border: none">
                         <hr style="border: none">
                     </div>
                     <div class="row">
                         @foreach ($rooms as $data)
-                            <div class="col-md-2" onclick="create({{ $data->id_room }})">
-                                <div class="card card-user" style="background-color: rgb(177, 15, 161)">
-                                    <div class="image">
-                                        <img src="{{ asset('img/bg9.jpg') }}" alt="..." />
+                            @if ($data->status == 2)
+                                <div class="col-md-2" onclick="clean({{ $data->id_room }})">
+                                    <div class="card card-user" style="background-color: rgb(177, 91, 15)">
+                                        <div class="image">
+                                            <img src="{{ asset('img/bg9.jpg') }}" alt="..." />
+                                        </div>
+                                        <h3 style="text-align: center; padding-bottom:10px"><b>{{ $data->name }}</b>
+                                        </h3>
                                     </div>
-                                    <h3 style="text-align: center; padding-bottom:10px"><b>{{ $data->name }}</b></h3>
                                 </div>
-                            </div>
+                            @elseif($data->status == 3)
+                                <div class="col-md-2" onclick="fix({{ $data->id_room }})">
+                                    <div class="card card-user" style="background-color: rgb(243, 14, 14)">
+                                        <div class="image">
+                                            <img src="{{ asset('img/bg9.jpg') }}" alt="..." />
+                                        </div>
+                                        <h3 style="text-align: center; padding-bottom:10px"><b>{{ $data->name }}</b>
+                                        </h3>
+                                    </div>
+                                </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -50,9 +56,6 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 class="modal-title" id="exampleModalLongTitle"></h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                     </div>
                     <div class="modal-body">
                         <div class="content">
@@ -76,5 +79,5 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script language="javascript" src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
-    <script src="js/checkin.js"></script>
+    <script src="js/rooms.js"></script>
 @endsection

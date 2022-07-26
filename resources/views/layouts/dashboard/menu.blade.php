@@ -51,8 +51,7 @@
                                              document.getElementById('logout-form').submit();">
                                 {{ __('Đăng xuất') }}
                             </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                style="display: none;">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
                         </li>
@@ -138,6 +137,12 @@
                     <a href="admin/checkout">
                         <i class="pe-7s-graph"></i>
                         <p>Trả phòng</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin/clean">
+                        <i class="pe-7s-graph"></i>
+                        <p>Dọn dẹp & sửa phòng</p>
                     </a>
                 </li>
             @endrole

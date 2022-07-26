@@ -7,7 +7,11 @@
                         <a href="#icon-info" data-toggle="tab"><i class="fa fa-info"></i> Thông tin thời gian thuê
                             phòng + khách hàng</a>
                     </li>
-                    <button class="btn btn-success">Trả phòng</button>
+                    @foreach ($checkin as $item)
+                        <button class="btn btn-success" onclick="create({{ $item->id_checkin_room }})">Trả
+                            phòng</button>
+                    @endforeach
+
                 </ul>
                 <div class="tab-content">
                     <div id="icon-info" class="tab-pane active">
@@ -66,7 +70,77 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="insertForm-checkout" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form id="frm-checkout">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLongTitle">Thêm dịch vụ</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="content">
+                        <input type="hidden" class="form-control" id="id-checkin-room" name="id-checkin-room">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Tên phòng:</label>
+                                    <input type="text" class="form-control" id="name-room" name="name-room" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Thời gian thuê:</label>
+                                    <input type="text" class="form-control" id="time-start" name="time-start"
+                                        disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Thời gian trả:</label>
+                                    <input type="text" class="form-control" id="time-end" name="time-end" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" id="all-price-room">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" id="all-services">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" id="all-additional-fee">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" id="total-price">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary" id="btn-checkout"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script language="javascript" src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
+<script src="js/checkout.js"></script>
 {{-- @push('js')
     <script type="text/javascript">
         let currentDate = new Date();

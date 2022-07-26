@@ -96,7 +96,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="close-additional-fee"
                         data-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary" onclick="saveAdditionalFee()">Thêm</button>
+                    <button type="submit" class="btn btn-primary" onclick="saveAdditionalFee()"
+                        id="btn-additional-fee">Thêm</button>
                 </div>
             </form>
         </div>

@@ -42,6 +42,8 @@ class checkoutController extends Controller
             'services' => $get_info_service,
             'additional_fee' => $get_info_add,
             'index' => 1,
+            'sum_services' => 0,
+            'sum_additional-fee' => 0,
         ]);
     }
 }

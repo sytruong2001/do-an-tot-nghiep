@@ -15,6 +15,7 @@ use App\Http\Controllers\SuperAdmin\priceRoomController;
 use App\Http\Controllers\SuperAdmin\revenueController;
 use App\Http\Controllers\SuperAdmin\RoomController;
 use App\Http\Controllers\SuperAdmin\typeRoomController;
+use App\Models\RoomModel;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,7 +60,8 @@ Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(func
     });
 
     Route::controller(revenueController::class)->group(function () {
-        Route::get('/revenue-room', 'index')->name('revenue.indexRevenue');
+        Route::get('/doanh-so', 'index')->name('revenue.indexRevenue');
+        Route::get('/search-rev', 'index')->name('revenue.searchRevenue');
     });
 });
 
@@ -77,6 +79,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
     Route::controller(checkoutController::class)->group(function () {
         Route::get('/checkout', 'index')->name('checkout.createCheckout');
+    });
+
+    Route::controller(RoomController::class)->group(function () {
+        Route::get('/clean', 'getRoom')->name('room.clean');
     });
 });
 
@@ -104,7 +110,6 @@ Route::prefix('api')->group(function () {
         // nhân viên
         Route::get('/get_account/{id}', [AccountApi::class, 'getinfo'])->name('account.getInfoAccount');
         Route::post('/create_account', [AccountApi::class, 'create'])->name('account.createAccount');
-        Route::post('/update_account', [AccountApi::class, 'update'])->name('account.updateAccount');
         Route::post('/lock_account/{id}', [AccountApi::class, 'lockOrUnlock'])->name('account.lockAccount');
     });
 
@@ -113,6 +118,8 @@ Route::prefix('api')->group(function () {
 
         Route::post('/create_checkin', [checkinApi::class, 'create'])->name('checkin.createCheckin');
         Route::get('/get_checkin/{id}', [checkoutApi::class, 'getInfo'])->name('checkout.getCheckin');
+
+        Route::post('/create_checkout', [checkoutApi::class, 'create'])->name('checkout.createCheckout');
 
         Route::get('/get_service/{id}', [servicesApi::class, 'getInfo'])->name('services.getService');
         Route::post('/create_service', [servicesApi::class, 'create'])->name('services.createService');
@@ -123,6 +130,12 @@ Route::prefix('api')->group(function () {
         Route::post('/create_additional_fee', [additionalFeeApi::class, 'create'])->name('additionalFee.createadditionalFee');
         Route::post('/update_additional_fee', [additionalFeeApi::class, 'update'])->name('additionalFee.updateadditionalFee');
         Route::post('/delete_additional_fee/{id}', [additionalFeeApi::class, 'destroy'])->name('additionalFee.deleteadditionalFee');
+
+        Route::post('/clean/{id}', [RoomApi::class, 'clean'])->name('room.clean');
     });
+
+    Route::post('/change-info', [AccountApi::class, 'changeInfo'])->name('admin.changeInfo');
+
+    Route::post('/change-password', [AccountApi::class, 'changePassword'])->name('admin.changePassword');
 });
 require __DIR__ . '/auth.php';

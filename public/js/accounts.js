@@ -12,35 +12,6 @@ function add() {
     $("#exampleModalLongTitle").html("Thêm nhân viên");
     $("#button").html("Thêm");
 }
-// function edit(id) {
-//     $.ajax({
-//         url: "/api/superadmin/get_account/" + id,
-//         type: "get",
-//         dataType: "json",
-//         success: function (rs) {
-//             var name, email, phone, dob, gender, address;
-//             rs.forEach((data) => {
-//                 name = data.name;
-//                 email = data.email;
-//                 phone = data.info_user.phone;
-//                 gender = data.info_user.gender;
-//                 address = data.info_user.address;
-//                 dob = data.info_user.date_of_birth;
-//             });
-//             $("#insertForm").modal("show");
-//             $("#exampleModalLongTitle").html(
-//                 "Cập nhật thông tin loại nhân viên"
-//             );
-//             $("#name").val(name);
-//             $("#email").val(email);
-//             $("#address").val(address);
-//             $("#phone").val(phone);
-//             $("#birth_of_date").val(dob);
-//             $("#id").val(id);
-//             $("#button").html("Cập nhật");
-//         },
-//     });
-// }
 
 function save() {
     var name = $("#name").val();
@@ -75,28 +46,6 @@ function save() {
                 }
             },
         });
-    } else {
-        $.ajax({
-            url: "/api/superadmin/update_account",
-            type: "post",
-            dataType: "json",
-            data: {
-                name: name,
-                email: email,
-                password: password,
-                phone: phone,
-                birth_of_date: birth_of_date,
-                address: address,
-                gender: gender,
-                id: id,
-            },
-            success: function (data) {
-                if (data === 200) {
-                    $("#frm")[0].reset();
-                    onFinishWizard();
-                }
-            },
-        });
     }
 }
 
@@ -109,9 +58,10 @@ function lock(id) {
             <button type="submit" class="btn btn-primary" id="confirm">Đồng ý</button>
             `;
     $(".modal-footer").append(btn);
+
     $("button#confirm").on("click", function () {
         $.ajax({
-            url: "/api/superadmin/lock_price_room/" + id,
+            url: "/api/superadmin/lock_account/" + id,
             type: "post",
             dataType: "json",
             success: function (rs) {
@@ -126,41 +76,7 @@ function lock(id) {
         });
     });
 }
-function unlock(id) {
-    $("#insertForm").modal("show");
-    $("#exampleModalLongTitle").html("Xác nhận");
-    $(".modal-body").html("Bạn có chắc chắn muốn mở khóa?");
-    $(".modal-footer").empty();
-    var btn = `
-            <button type="submit" class="btn btn-primary" id="confirm">Đồng ý</button>
-            `;
-    $(".modal-footer").append(btn);
-    $("button#confirm").on("click", function () {
-        $.ajax({
-            url: "/api/superadmin/lock_price_room/" + id,
-            type: "post",
-            dataType: "json",
-            success: function (rs) {
-                if (rs.code === 200) {
-                    onFinishWizard();
-                } else if (rs.code === 201) {
-                    $("#insertForm").modal("hide");
-                    alertMessage(rs.error);
-                }
-            },
-        });
-    });
-}
 
-function alertMessage(message) {
-    var html = `
-        <div class="alert alert-danger">
-            <button type="button" aria-hidden="true" class="close">×</button>
-            <span>${message}</span>
-        </div>
-    `;
-    $("#alerts").append(html);
-}
 function onFinishWizard() {
     swal("Hoàn tất!", "Thành công", "success");
 }
