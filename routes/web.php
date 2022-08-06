@@ -79,6 +79,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
     Route::controller(checkoutController::class)->group(function () {
         Route::get('/checkout', 'index')->name('checkout.createCheckout');
+        Route::get('/history', 'history')->name('checkout.history');
     });
 
     Route::controller(RoomController::class)->group(function () {
@@ -88,6 +89,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
 // api
 Route::prefix('api')->group(function () {
+
+    Route::get('/get_type_room/{id}', [typeRoomApi::class, 'getinfo'])->name('typeroom.getInfoTypeRoom');
+    Route::get('/get_price_room/{id}', [priceRoomApi::class, 'getinfo'])->name('priceroom.getInfoPriceRoom');
+
     Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(function () {
         // loại phòng
         Route::get('/get_type_room/{id}', [typeRoomApi::class, 'getinfo'])->name('typeroom.getInfoTypeRoom');
@@ -115,9 +120,13 @@ Route::prefix('api')->group(function () {
 
     Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         Route::get('/get_room/{id}', [RoomApi::class, 'getinfo'])->name('typeroom.getRoom');
+        Route::post('/search-room', [RoomApi::class, 'searchRoom'])->name('rooms.searchForNameRoom');
+        Route::post('/search-type-room/{id}', [RoomApi::class, 'searchTypeRoom'])->name('rooms.searchForTypeRoom');
+        Route::post('/search-price-room/{id}', [RoomApi::class, 'searchPriceRoom'])->name('rooms.searchForPriceRoom');
 
         Route::post('/create_checkin', [checkinApi::class, 'create'])->name('checkin.createCheckin');
         Route::get('/get_checkin/{id}', [checkoutApi::class, 'getInfo'])->name('checkout.getCheckin');
+        Route::post('/search-checkin', [checkinApi::class, 'searchRoom'])->name('checkin.searchCheckin');
 
         Route::post('/create_checkout', [checkoutApi::class, 'create'])->name('checkout.createCheckout');
 
@@ -137,5 +146,7 @@ Route::prefix('api')->group(function () {
     Route::post('/change-info', [AccountApi::class, 'changeInfo'])->name('admin.changeInfo');
 
     Route::post('/change-password', [AccountApi::class, 'changePassword'])->name('admin.changePassword');
+
+    Route::get('/get-status-room', [RoomApi::class, 'getStatusRoom'])->name('room.getStatusRoom');
 });
 require __DIR__ . '/auth.php';

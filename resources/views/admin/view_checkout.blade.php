@@ -15,28 +15,26 @@
                 </div>
                 <div class="content">
                     <div class="row">
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" value=""
-                                placeholder="Nhập tên phòng bạn muốn tìm">
-                        </div>
-                        <div class="col-md-6">
-                            <select name="idClass" class="form-control" onclick="alert('ahihi')">
-                                <option style="text-align: center" value="">Phòng hôm nay cần trả</option>
-                            </select>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="search-room"
+                                placeholder="Nhập tên phòng bạn muốn tìm" oninput="searchRoom()">
                         </div>
                         <hr style="border: none">
                         <hr style="border: none">
                     </div>
-                    <div class="row">
+                    <div class="row" id="rooms-content">
                         @foreach ($rooms as $data)
                             {{-- <div class="col-md-2" onclick="create({{ $data->id_checkin_room }})"> --}}
                             <a href="/admin/detail-checkout/{{ $data->id_checkin_room }}">
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="card card-user" style="background-color: lightgreen">
                                         <div class="image">
-                                            <img src="{{ asset('img/bg9.jpg') }}" alt="..." />
+                                            <img src="https://khachsandanang.info/wp-content/uploads/2016/08/avatar-room.jpg"
+                                                alt="..." />
                                         </div>
                                         <h3 style="text-align: center; padding-bottom:10px"><b>{{ $data->name }}</b></h3>
+                                        <b>Thời gian trả phòng:</b>
+                                        <h5 style="text-align: center; padding-bottom:10px">{{ $data->time_end }}</h5>
                                     </div>
                                 </div>
                             </a>
@@ -74,4 +72,8 @@
             </div>
         </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script language="javascript" src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
+    <script src="js/checkout.js"></script>
 @endsection

@@ -13,7 +13,6 @@ class checkinController extends Controller
         $data = RoomModel::query()
             ->where('status', 0)
             ->get();
-
         return view('admin.view_checkin', ['rooms' => $data]);
     }
 }

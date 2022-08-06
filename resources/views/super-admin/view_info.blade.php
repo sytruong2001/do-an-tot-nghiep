@@ -148,7 +148,7 @@
                         </div>
                         <div class="content">
                             <div class="author">
-                                <a href="#">
+                                <a>
                                     <img class="avatar border-gray" src="{{ asset('img/AngelRosé.jpg') }}"
                                         alt="..." />
 

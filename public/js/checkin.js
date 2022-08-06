@@ -5,7 +5,162 @@ $(document).ready(function () {
         },
     });
 });
+getInfo();
+function getInfo() {
+    $.ajax({
+        url: "/api/get_type_room/null",
+        type: "get",
+        dataType: "json",
+        success: function (rs1) {
+            var htmlTypeRoom = ``;
+            htmlTypeRoom += `
+            <select class="form-control" name="tim-loai-phong" id="tim-loai-phong" onchange="searchTypeRoom()">
+                <option style="text-align: center">--Chọn loại phòng--
+                </option>
+            `;
+            rs1.forEach((el1) => {
+                htmlTypeRoom += `
+                <option style="text-align: center" value="${el1.id_type_room}">${el1.name}
+                </option>
+                `;
+            });
+            htmlTypeRoom += `</select>`;
+            $("#search-type-room").html(htmlTypeRoom);
+        },
+    });
+    $.ajax({
+        url: "/api/get_price_room/null",
+        type: "get",
+        dataType: "json",
+        success: function (rs2) {
+            var htmlPriceRoom = ``;
+            htmlPriceRoom += `
+            <select class="form-control" name="tim-gia-phong" id="tim-gia-phong" onchange="searchPriceRoom()">
+                <option style="text-align: center">--Chọn giá phòng--
+                </option>
+            `;
+            rs2.forEach((el2) => {
+                var first_hour = convertMoney(el2.first_hour);
+                var next_hour = convertMoney(el2.next_hour);
+                htmlPriceRoom += `
+                <option style="text-align: center" value="${el2.id_price_room}">${first_hour} -- ${next_hour}
+                </option>
+                `;
+            });
+            htmlPriceRoom += `</select>`;
+            $("#search-price-room").html(htmlPriceRoom);
+        },
+    });
+    // $.ajax({
+    //     url: "/api/get_type_room/null",
+    //     type: "get",
+    //     dataType: "json",
+    //     success: function (data) {
+    //         console.log(data);
+    //     },
+    // });
+}
+// tìm kiếm theo loại phòng
+function searchTypeRoom() {
+    var e = document.getElementById("tim-loai-phong");
+    var f = e.options[e.selectedIndex].value;
+    $.ajax({
+        url: "/api/admin/search-type-room/" + f,
+        type: "post",
+        dataType: "json",
+        success: function (rs3) {
+            console.log(rs3);
+            $("#rooms-content").html("");
+            rs3.room.forEach((el3) => {
+                var htmlRoom = `
+                <div class="col-md-3" onclick="create(${el3.id_room})">
+                    <div class="card card-user" style="background-color: rgb(177, 15, 161)">
+                        <div class="image">
+                            <img src="https://hotlinedatphong.com/wp-content/uploads/2020/10/khach-san-muong-thanh-holiday-mui-ne-24-800x450-1.jpg"
+                                alt="..." />
+                        </div>
+                        <h3 style="text-align: center;"><b>${el3.name}</b></h3>
+                        <h3 style="text-align: center; padding-bottom:10px"><b>(${el3.type_room.name})</b></h3>
+                        </h3>
+                    </div>
+                </div>
+                `;
+                $("#rooms-content").append(htmlRoom);
+            });
+        },
+    });
+}
 
+// tìm kiếm theo giá phòng
+function searchPriceRoom() {
+    var e = document.getElementById("tim-gia-phong");
+    var f = e.options[e.selectedIndex].value;
+    $.ajax({
+        url: "/api/admin/search-price-room/" + f,
+        type: "post",
+        dataType: "json",
+        success: function (rs3) {
+            $("#rooms-content").html("");
+            rs3.room.forEach((el3) => {
+                var htmlRoom = `
+                <div class="col-md-3" onclick="create(${el3.id_room})">
+                    <div class="card card-user" style="background-color: rgb(177, 15, 161)">
+                        <div class="image">
+                            <img src="https://hotlinedatphong.com/wp-content/uploads/2020/10/khach-san-muong-thanh-holiday-mui-ne-24-800x450-1.jpg"
+                                alt="..." />
+                        </div>
+                        <h3 style="text-align: center;"><b>${el3.name}</b></h3>
+                        <h3 style="text-align: center; padding-bottom:10px"><b>(${el3.type_room.name})</b></h3>
+                        </h3>
+                    </div>
+                </div>
+                `;
+                $("#rooms-content").append(htmlRoom);
+            });
+        },
+    });
+}
+
+// chuyển đổi đơn vị tiền tệ
+function convertMoney(number) {
+    let num = new Intl.NumberFormat("vi", {
+        style: "currency",
+        currency: "VND",
+    }).format(number);
+    return num;
+}
+
+// tìm kiếm phòng theo tên
+function searchRoom() {
+    var name = $("#search-room").val();
+    $.ajax({
+        url: "/api/admin/search-room",
+        type: "post",
+        dataType: "json",
+        data: { name: name, status: 0 },
+        success: function (rs3) {
+            $("#rooms-content").html("");
+            rs3.room.forEach((el3) => {
+                var htmlRoom = `
+                <div class="col-md-3" onclick="create(${el3.id_room})">
+                    <div class="card card-user" style="background-color: rgb(177, 15, 161)">
+                        <div class="image">
+                            <img src="https://hotlinedatphong.com/wp-content/uploads/2020/10/khach-san-muong-thanh-holiday-mui-ne-24-800x450-1.jpg"
+                                alt="..." />
+                        </div>
+                        <h3 style="text-align: center;"><b>${el3.name}</b></h3>
+                        <h3 style="text-align: center; padding-bottom:10px"><b>(${el3.type_room.name})</b></h3>
+                        </h3>
+                    </div>
+                </div>
+                `;
+                $("#rooms-content").append(htmlRoom);
+            });
+        },
+    });
+}
+
+// tạo phiếu nhận phòng
 function create(id) {
     var x;
     let currentDate = new Date();

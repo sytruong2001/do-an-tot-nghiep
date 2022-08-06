@@ -18,6 +18,7 @@
                 <legend>Danh sách loại phòng</legend>
             </div>
             <div class="content">
+
                 <button type="button" class="btn btn-info btn-md" data-toggle="modal" onClick="add()">Thêm</button><br><br>
                 <div class="fresh-datatables">
                     <table id="datatable_type_room" class="table table-striped table-no-bordered table-hover"
@@ -62,8 +63,7 @@
                                                 style="height: 38px; width: 38px; padding: 0 8px 0 8px"><i
                                                     class="fa fa-lock"></i></button>
                                         @else
-                                            <button class="btn btn-success lock"
-                                                onclick="unlock({{ $data->id_type_room }})"
+                                            <button class="btn btn-success lock" onclick="unlock({{ $data->id_type_room }})"
                                                 style="height: 38px; width: 38px; padding: 0 8px 0 8px"><i
                                                     class="fa fa-unlock"></i></button>
                                         @endif

@@ -10,6 +10,8 @@
                     @foreach ($checkin as $item)
                         <button class="btn btn-success" onclick="create({{ $item->id_checkin_room }})">Trả
                             phòng</button>
+                        <button class="btn btn-success"><a href="##"><i class="fa fa-print"></i>In hóa
+                                đơn</a></button>
                     @endforeach
 
                 </ul>

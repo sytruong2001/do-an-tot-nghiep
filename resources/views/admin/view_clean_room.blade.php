@@ -15,27 +15,29 @@
                 </div>
                 <div class="content">
                     <div class="row">
-                        <div class="col-md-12">
-                            <input type="text" class="form-control" value=""
-                                placeholder="Nhập tên phòng bạn muốn tìm">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="search-room"
+                                placeholder="Nhập tên phòng bạn muốn tìm" oninput="searchRoom()">
                         </div>
                         <hr style="border: none">
                         <hr style="border: none">
                     </div>
-                    <div class="row">
+                    <div class="row" id="rooms-content">
                         @foreach ($rooms as $data)
                             @if ($data->status == 2)
-                                <div class="col-md-2" onclick="clean({{ $data->id_room }})">
+                                <div class="col-md-3" onclick="clean({{ $data->id_room }})">
                                     <div class="card card-user" style="background-color: rgb(177, 91, 15)">
                                         <div class="image">
-                                            <img src="{{ asset('img/bg9.jpg') }}" alt="..." />
+                                            <img src="https://th.bing.com/th/id/OIP.OpuZaJhOd0JGZgVuAPtcWwHaD3?pid=ImgDet&rs=1"
+                                                alt="..." />
+
                                         </div>
                                         <h3 style="text-align: center; padding-bottom:10px"><b>{{ $data->name }}</b>
                                         </h3>
                                     </div>
                                 </div>
                             @elseif($data->status == 3)
-                                <div class="col-md-2" onclick="fix({{ $data->id_room }})">
+                                <div class="col-md-3" onclick="fix({{ $data->id_room }})">
                                     <div class="card card-user" style="background-color: rgb(243, 14, 14)">
                                         <div class="image">
                                             <img src="{{ asset('img/bg9.jpg') }}" alt="..." />

@@ -16,27 +16,39 @@
                 <div class="content">
                     <div class="row">
                         <div class="col-md-4">
-                            <select name="idClass" class="form-control" id="search">
-                                <option style="text-align: center" value="">Chọn loại phòng
+                            <input type="text" class="form-control" id="search-room"
+                                placeholder="Nhập tên phòng bạn muốn tìm" oninput="searchRoom()">
+                        </div>
+                        <hr style="border: none">
+                        <hr style="border: none">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" id="search-type-room">
+
+                        </div>
+                        <div class="col-md-4" id="search-price-room">
+
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control" id="tim-vi-tri">
+                                <option style="text-align: center">--Vị trí--
                                 </option>
-                                <option style="text-align: center" value="">--------------------</option>
-                                <option style="text-align: center" value="">--------------------</option>
-                                <option style="text-align: center" value="">--------------------</option>
-                                <option style="text-align: center" value="">--------------------</option>
                             </select>
                         </div>
                         <hr style="border: none">
                         <hr style="border: none">
                         <hr style="border: none">
                     </div>
-                    <div class="row">
+                    <div class="row" id="rooms-content">
                         @foreach ($rooms as $data)
-                            <div class="col-md-2" onclick="create({{ $data->id_room }})">
+                            <div class="col-md-3" onclick="create({{ $data->id_room }})">
                                 <div class="card card-user" style="background-color: rgb(177, 15, 161)">
                                     <div class="image">
-                                        <img src="{{ asset('img/bg9.jpg') }}" alt="..." />
+                                        <img src="https://hotlinedatphong.com/wp-content/uploads/2020/10/khach-san-muong-thanh-holiday-mui-ne-24-800x450-1.jpg"
+                                            alt="..." />
                                     </div>
                                     <h3 style="text-align: center; padding-bottom:10px"><b>{{ $data->name }}</b></h3>
+                                    </h3>
                                 </div>
                             </div>
                         @endforeach

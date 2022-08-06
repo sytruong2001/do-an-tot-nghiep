@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\CheckInModel;
+use App\Models\PriceRoomModel;
 use App\Models\RoomModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,9 +21,20 @@ class RoomApi extends Controller
             $json['type'] = $type_room;
             echo json_encode($json);
         } else {
-            $data = DB::table('type_room')->get();
+            $data = DB::table('rooms')->get();
             echo json_encode($data);
         }
+    }
+    public function getStatusRoom()
+    {
+
+        $checkin = RoomModel::query()->where('status', 0)->count();
+        $checkout = CheckInModel::query()->where('status', 0)->count();
+        $clean = RoomModel::query()->where('status', 2)->count();
+        $json['checkin'] = $checkin;
+        $json['checkout'] = $checkout;
+        $json['clean'] = $clean;
+        echo json_encode($json);
     }
     public function create(Request $request)
     {
@@ -106,5 +119,38 @@ class RoomApi extends Controller
                 'status' => 0,
             ]);
         echo json_encode(200);
+    }
+
+    public function searchRoom(Request $request)
+    {
+        $name = $request->get('name');
+        $status = $request->get('status');
+        $room = RoomModel::query()
+            ->with('type_room')->where('rooms.name', 'like', '%' . $name . '%')->where('rooms.status', $status)->get();
+        $type_room = DB::table('type_room')->get();
+        $json['room'] = $room;
+        $json['type'] = $type_room;
+        echo json_encode($json);
+    }
+
+    public function searchTypeRoom($id)
+    {
+        $room = RoomModel::query()
+            ->with('type_room')->where('id_type_room', $id)->where('rooms.status', 0)->get();
+        $type_room = DB::table('type_room')->get();
+        $json['room'] = $room;
+        $json['type'] = $type_room;
+        echo json_encode($json);
+    }
+    public function searchPriceRoom($id)
+    {
+        $get_id_type_room = PriceRoomModel::query()->where('id_price_room', $id)->select('id_type_room')->first();
+        $id_type_room = $get_id_type_room->id_type_room;
+        $room = RoomModel::query()
+            ->with('type_room')->where('id_type_room', $id_type_room)->where('rooms.status', 0)->get();
+        $type_room = DB::table('type_room')->get();
+        $json['room'] = $room;
+        $json['type'] = $type_room;
+        echo json_encode($json);
     }
 }

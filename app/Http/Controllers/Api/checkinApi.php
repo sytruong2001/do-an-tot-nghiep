@@ -59,4 +59,15 @@ class checkinApi extends Controller
             echo json_encode($json);
         }
     }
+
+    public function searchRoom(Request $request)
+    {
+        $name = $request->get('name');
+        $status = $request->get('status');
+        $room = RoomModel::query()->join('checkin', 'rooms.id_room', '=', 'checkin.id_room')->where('rooms.name', 'like', '%' . $name . '%')->orWhere('name', 'John')->where('rooms.status', $status)->get();
+        $type_room = DB::table('type_room')->get();
+        $json['room'] = $room;
+        $json['type'] = $type_room;
+        echo json_encode($json);
+    }
 }

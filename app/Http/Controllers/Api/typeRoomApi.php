@@ -14,7 +14,7 @@ class typeRoomApi extends Controller
         if ($id !== "null") {
             $data = DB::table('type_room')->where('id_type_room', $id)->get();
         } else {
-            $data = DB::table('type_room')->get();
+            $data = DB::table('type_room')->where('status', 0)->get();
         }
         echo json_encode($data);
     }

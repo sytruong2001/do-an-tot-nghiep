@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AdditionalFeeModel;
 use App\Models\CheckInModel;
+use App\Models\CheckOutModel;
 use App\Models\CustomersModel;
 use App\Models\RoomModel;
 use App\Models\ServicesModel;
@@ -19,6 +20,14 @@ class checkoutController extends Controller
             ->where('checkin.status', 0)
             ->get();
         return view('admin.view_checkout', ['rooms' => $data]);
+    }
+
+    public function history()
+    {
+        $data = CheckOutModel::query()
+            ->with('checkin')
+            ->get();
+        return view('admin.view_history', ['index' => 1, 'checkout' => $data]);
     }
 
     public function getInfo($id)

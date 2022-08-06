@@ -130,19 +130,25 @@
                 <li>
                     <a href="admin/checkin">
                         <i class="pe-7s-graph"></i>
-                        <p>Nhận phòng</p>
+                        <p>Checkin <span style="color:blue" id="numb-room-checkin"></span></p>
                     </a>
                 </li>
                 <li>
                     <a href="admin/checkout">
                         <i class="pe-7s-graph"></i>
-                        <p>Trả phòng</p>
+                        <p>Checkout <span style="color:blue" id="numb-room-checkout"></span></p>
                     </a>
                 </li>
                 <li>
                     <a href="admin/clean">
                         <i class="pe-7s-graph"></i>
-                        <p>Dọn dẹp & sửa phòng</p>
+                        <p>Dọn dẹp & sửa phòng <span style="color:blue" id="numb-room-clean"></span></p>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin/history">
+                        <i class="pe-7s-graph"></i>
+                        <p>Lịch sử thuê phòng</p>
                     </a>
                 </li>
             @endrole
@@ -150,3 +156,26 @@
         </ul>
     </div>
 </div>
+@push('js')
+    <script>
+        getInfo();
+
+        function getInfo() {
+            $.ajax({
+                url: "/api/get-status-room",
+                type: "get",
+                dataType: "json",
+                success: function(rs) {
+                    var htmlCheckin = `(${rs.checkin})`;
+                    $('#numb-room-checkin').html(htmlCheckin);
+
+                    var htmlCheckout = `(${rs.checkout})`;
+                    $('#numb-room-checkout').html(htmlCheckout);
+
+                    var htmlClean = `(${rs.clean})`;
+                    $('#numb-room-clean').html(htmlClean);
+                },
+            });
+        }
+    </script>
+@endpush

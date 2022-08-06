@@ -126,6 +126,51 @@ function save() {
     }
 }
 
+// tìm kiếm phòng theo tên
+function searchRoom() {
+    var name = $("#search-room").val();
+    $.ajax({
+        url: "/api/admin/search-room",
+        type: "post",
+        dataType: "json",
+        data: { name: name, status: 2 },
+        success: function (rs3) {
+            $("#rooms-content").html("");
+            rs3.room.forEach((el3) => {
+                var htmlRoom = ``;
+                if (el3.status == 2) {
+                    htmlRoom += `
+                    <div class="col-md-3" onclick="clean(${el3.id_room})">
+                        <div class="card card-user" style="background-color: rgb(177, 91, 15)">
+                            <div class="image">
+                                <img src="https://th.bing.com/th/id/OIP.OpuZaJhOd0JGZgVuAPtcWwHaD3?pid=ImgDet&rs=1"
+                                    alt="..." />
+
+                            </div>
+                            <h3 style="text-align: center; padding-bottom:10px"><b>${el3.name}</b>
+                            </h3>
+                        </div>
+                    </div>
+                    `;
+                } else if (el3.status == 3) {
+                    htmlRoom += `
+                    <div class="col-md-3" onclick="fix(${el3.id_room})">
+                        <div class="card card-user" style="background-color: rgb(243, 14, 14)">
+                            <div class="image">
+                                <img src="{{ asset('img/bg9.jpg') }}" alt="..." />
+                            </div>
+                            <h3 style="text-align: center; padding-bottom:10px"><b>${el3.name}</b>
+                            </h3>
+                        </div>
+                    </div>
+                    `;
+                }
+                $("#rooms-content").append(htmlRoom);
+            });
+        },
+    });
+}
+
 function clean(id) {
     $("#insertForm").modal("show");
     $("#exampleModalLongTitle").html("Xác nhận");

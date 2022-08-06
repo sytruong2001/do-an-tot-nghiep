@@ -34,7 +34,7 @@ function create(id) {
             let total_time = (
                 Number(currentDate) / (1000 * 60 * 60) -
                 Number(time) / (1000 * 60 * 60)
-            ).toFixed(2);
+            ).toFixed(0);
             console.log(total_time);
             // số tiền thuê phòng
             rs.price_hour.forEach((data_price_hour) => {
@@ -128,6 +128,38 @@ function create(id) {
                         setTimeout("location.reload(true);", 500);
                     },
                 });
+            });
+        },
+    });
+}
+// tìm kiếm phòng theo tên
+function searchRoom() {
+    var name = $("#search-room").val();
+    $.ajax({
+        url: "/api/admin/search-checkin",
+        type: "post",
+        dataType: "json",
+        data: { name: name, status: 1 },
+        success: function (rs3) {
+            $("#rooms-content").html("");
+            console.log(rs3);
+            rs3.room.forEach((el3) => {
+                var htmlRoom = `
+                <a href="/admin/detail-checkout/${el3.id_checkin_room}">
+                    <div class="col-md-3">
+                        <div class="card card-user" style="background-color: lightgreen">
+                            <div class="image">
+                                <img src="https://khachsandanang.info/wp-content/uploads/2016/08/avatar-room.jpg"
+                                    alt="..." />
+                            </div>
+                            <h3 style="text-align: center; padding-bottom:10px"><b>${el3.name}</b></h3>
+                            <b>Thời gian trả phòng:</b>
+                            <h5 style="text-align: center; padding-bottom:10px">${el3.time_end}</h5>
+                        </div>
+                    </div>
+                </a>
+                `;
+                $("#rooms-content").append(htmlRoom);
             });
         },
     });
