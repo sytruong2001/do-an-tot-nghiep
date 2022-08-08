@@ -5,6 +5,7 @@ $(document).ready(function () {
         },
     });
 });
+
 getInfo();
 function getInfo() {
     $.ajax({
@@ -74,14 +75,14 @@ function searchTypeRoom() {
             rs3.room.forEach((el3) => {
                 var htmlRoom = `
                 <div class="col-md-3" onclick="create(${el3.id_room})">
-                    <div class="card card-user" style="background-color: rgb(177, 15, 161)">
+                    <div class="card card-user" style="background-color: gray">
                         <div class="image">
                             <img src="https://hotlinedatphong.com/wp-content/uploads/2020/10/khach-san-muong-thanh-holiday-mui-ne-24-800x450-1.jpg"
                                 alt="..." />
                         </div>
                         <h3 style="text-align: center;"><b>${el3.name}</b></h3>
                         <h3 style="text-align: center; padding-bottom:10px"><b>(${el3.type_room.name})</b></h3>
-                        </h3>
+
                     </div>
                 </div>
                 `;
@@ -104,14 +105,14 @@ function searchPriceRoom() {
             rs3.room.forEach((el3) => {
                 var htmlRoom = `
                 <div class="col-md-3" onclick="create(${el3.id_room})">
-                    <div class="card card-user" style="background-color: rgb(177, 15, 161)">
+                    <div class="card card-user" style="background-color: gray">
                         <div class="image">
                             <img src="https://hotlinedatphong.com/wp-content/uploads/2020/10/khach-san-muong-thanh-holiday-mui-ne-24-800x450-1.jpg"
                                 alt="..." />
                         </div>
                         <h3 style="text-align: center;"><b>${el3.name}</b></h3>
                         <h3 style="text-align: center; padding-bottom:10px"><b>(${el3.type_room.name})</b></h3>
-                        </h3>
+
                     </div>
                 </div>
                 `;
@@ -143,14 +144,14 @@ function searchRoom() {
             rs3.room.forEach((el3) => {
                 var htmlRoom = `
                 <div class="col-md-3" onclick="create(${el3.id_room})">
-                    <div class="card card-user" style="background-color: rgb(177, 15, 161)">
+                    <div class="card card-user" style="background-color: gray">
                         <div class="image">
                             <img src="https://hotlinedatphong.com/wp-content/uploads/2020/10/khach-san-muong-thanh-holiday-mui-ne-24-800x450-1.jpg"
                                 alt="..." />
                         </div>
                         <h3 style="text-align: center;"><b>${el3.name}</b></h3>
                         <h3 style="text-align: center; padding-bottom:10px"><b>(${el3.type_room.name})</b></h3>
-                        </h3>
+
                     </div>
                 </div>
                 `;

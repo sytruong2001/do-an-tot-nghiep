@@ -64,9 +64,46 @@ class checkinApi extends Controller
     {
         $name = $request->get('name');
         $status = $request->get('status');
-        $room = RoomModel::query()->join('checkin', 'rooms.id_room', '=', 'checkin.id_room')->where('rooms.name', 'like', '%' . $name . '%')->orWhere('name', 'John')->where('rooms.status', $status)->get();
+        $room = RoomModel::query()->join('checkin', 'rooms.id_room', '=', 'checkin.id_room')->where('rooms.name', 'like', '%' . $name . '%')->where('checkin.status', $status)->get();
         $type_room = DB::table('type_room')->get();
         $json['room'] = $room;
+        $json['type'] = $type_room;
+        echo json_encode($json);
+    }
+
+    public function searchDateCheckin(Request $request)
+    {
+        $start_date = $request->get('start_date');
+        $end_date = $request->get('end_date');
+        $checkin = CheckInModel::query()
+            ->where('time_start', '>=', $start_date)
+            ->where('time_end', '<=', $end_date)
+            ->where('status', 0)
+            ->select('id_room')
+            ->get();
+        $check = CheckInModel::query()
+            ->where('time_start', '>=', $start_date)
+            ->where('time_end', '<=', $end_date)
+            ->where('status', 0)
+            ->count();
+        $resultArray = [];
+        if ($check != 0) {
+            foreach ($checkin as $item) {
+                $query = DB::table('rooms')
+                    ->where('rooms.id_room', '<>', $item->id_room)
+                    ->where('rooms.status', 0)
+                    ->get();
+                array_push($resultArray, $query);
+            }
+        } else {
+            $query = DB::table('rooms')
+                ->where('rooms.status', 0)
+                ->get();
+            array_push($resultArray, $query);
+        }
+
+        $type_room = DB::table('type_room')->get();
+        $json['room'] = $resultArray;
         $json['type'] = $type_room;
         echo json_encode($json);
     }

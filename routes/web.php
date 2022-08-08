@@ -33,6 +33,9 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::get('/login', function () {
+    return view('auth.login');
+});
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
@@ -75,6 +78,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
     Route::controller(checkinController::class)->group(function () {
         Route::get('/checkin', 'index')->name('checkin.createCheckin');
+
+        Route::get('/nhan-phong', 'getInfo')->name('checkin.getInfo');
     });
 
     Route::controller(checkoutController::class)->group(function () {
@@ -127,6 +132,7 @@ Route::prefix('api')->group(function () {
         Route::post('/create_checkin', [checkinApi::class, 'create'])->name('checkin.createCheckin');
         Route::get('/get_checkin/{id}', [checkoutApi::class, 'getInfo'])->name('checkout.getCheckin');
         Route::post('/search-checkin', [checkinApi::class, 'searchRoom'])->name('checkin.searchCheckin');
+        Route::get('/search-date-checkin', [checkinApi::class, 'searchDateCheckin'])->name('checkin.searchDateCheckin');
 
         Route::post('/create_checkout', [checkoutApi::class, 'create'])->name('checkout.createCheckout');
 

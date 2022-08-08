@@ -11,29 +11,14 @@
 
             <div class="card">
                 <div class="header">
-                    <legend>Quản lý đặt phòng</legend>
+                    <legend>Quản lý nhận phòng</legend>
                 </div>
                 <div class="content">
                     <div class="row">
                         <div class="col-md-4">
                             <input type="text" class="form-control" id="search-room"
-                                placeholder="Nhập tên phòng bạn muốn tìm" oninput="searchRoom()">
+                                placeholder="Nhập số CMT/CCCD bạn muốn tìm" oninput="searchRoom()">
                         </div>
-                        <hr style="border: none">
-                        <hr style="border: none">
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3" id="search-type-room">
-
-                        </div>
-                        <div class="col-md-3" id="search-price-room">
-
-                        </div>
-                        <div class="col-sm-3">
-                            <input type="text" name="datefilter" class="form-control input-sm" value=""
-                                placeholder="Chọn ngày" readonly />
-                        </div>
-                        <hr style="border: none">
                         <hr style="border: none">
                         <hr style="border: none">
                     </div>
@@ -88,55 +73,3 @@
     <script language="javascript" src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
     <script src="js/checkin.js"></script>
 @endsection
-@push('js')
-    <script type="text/javascript">
-        var search = function(start_date, end_date) {
-            $.ajax({
-                url: "api/admin/search-date-checkin",
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    start_date: start_date,
-                    end_date: end_date,
-                },
-                success: function(res) {
-                    console.log(res);
-                    $("#rooms-content").html("");
-                    res.room[0].forEach((item) => {
-                        var htmlRoom = `
-                    <div class="col-md-3" onclick="create(${item.id_room})">
-                        <div class="card card-user" style="background-color: gray">
-                            <div class="image">
-                                <img src="https://hotlinedatphong.com/wp-content/uploads/2020/10/khach-san-muong-thanh-holiday-mui-ne-24-800x450-1.jpg"
-                                    alt="..." />
-                            </div>
-                            <h3 style="text-align: center; padding-bottom:10px"><b>${item.name}</b></h3>
-                        </div>
-                    </div>
-                    `;
-                        $("#rooms-content").append(htmlRoom);
-
-                    });
-                },
-            });
-        }
-        $('input[name="datefilter"]').daterangepicker({
-            autoUpdateInput: false,
-            locale: {
-                cancelLabel: 'Clear'
-            },
-
-            format: 'YYYY-MM-DD'
-        });
-
-        $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('YYYY-MM-DD') + ' -- ' + picker.endDate.format('YYYY-MM-DD'));
-            check = true
-            search(picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'));
-        });
-
-        $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val('');
-        });
-    </script>
-@endpush

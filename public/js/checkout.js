@@ -139,7 +139,7 @@ function searchRoom() {
         url: "/api/admin/search-checkin",
         type: "post",
         dataType: "json",
-        data: { name: name, status: 1 },
+        data: { name: name, status: 0 },
         success: function (rs3) {
             $("#rooms-content").html("");
             console.log(rs3);

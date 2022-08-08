@@ -45,12 +45,12 @@
                                     </td>
                                     <td>
                                         <div style='width: 200px; height: 100px; overflow: auto;'>
-                                            {{ $data->first_hour }} VNĐ
+                                            {{ number_format($data->first_hour, 0, ',', '.') }} đ
                                         </div>
                                     </td>
                                     <td>
                                         <div style='width: 200px; height: 100px; overflow: auto;'>
-                                            {{ $data->next_hour }} VNĐ
+                                            {{ number_format($data->next_hour, 0, ',', '.') }} đ
                                         </div>
                                     </td>
                                     <td>

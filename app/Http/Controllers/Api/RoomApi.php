@@ -30,8 +30,10 @@ class RoomApi extends Controller
 
         $checkin = RoomModel::query()->where('status', 0)->count();
         $checkout = CheckInModel::query()->where('status', 0)->count();
+        $room = CheckInModel::query()->where('status', 2)->count();
         $clean = RoomModel::query()->where('status', 2)->count();
         $json['checkin'] = $checkin;
+        $json['room'] = $room;
         $json['checkout'] = $checkout;
         $json['clean'] = $clean;
         echo json_encode($json);

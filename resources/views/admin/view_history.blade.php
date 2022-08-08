@@ -49,12 +49,20 @@
                                     </td>
                                     <td>
                                         <div style=' height: 100px; overflow: auto;'>
-                                            aaa
+                                            @foreach ($customer as $cus)
+                                                @if ($cus->id_checkin_room == $data->id_checkin_room)
+                                                    {{ $cus->name }}<br>
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </td>
                                     <td>
                                         <div style=' height: 100px; overflow: auto;'>
-                                            222
+                                            @foreach ($rooms as $room)
+                                                @if ($room->id_checkin_room == $data->id_checkin_room)
+                                                    {{ $room->name }}
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </td>
                                     <td>
@@ -68,7 +76,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div style='width: 200px; height: 100px; overflow: auto;'>
+                                        <div style=' height: 100px; overflow: auto;'>
                                             {{ number_format($data->sum_price, 0, ',', '.') }} đ
                                         </div>
                                     </td>

@@ -9,15 +9,18 @@ use App\Models\CheckOutModel;
 use App\Models\CustomersModel;
 use App\Models\RoomModel;
 use App\Models\ServicesModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class checkoutController extends Controller
 {
     public function index()
     {
+        // $today = Carbon::today();
         $data = RoomModel::query()
             ->join('checkin', 'rooms.id_room', '=', 'checkin.id_room')
             ->where('checkin.status', 0)
+            // ->where('checkin.time_end', $today)
             ->get();
         return view('admin.view_checkout', ['rooms' => $data]);
     }
@@ -26,8 +29,14 @@ class checkoutController extends Controller
     {
         $data = CheckOutModel::query()
             ->with('checkin')
+            ->orderByDesc('id_checkout_room')
             ->get();
-        return view('admin.view_history', ['index' => 1, 'checkout' => $data]);
+        $customer = CustomersModel::query()
+            ->get();
+        $room = CheckInModel::query()
+            ->join('rooms', 'checkin.id_room', '=', 'rooms.id_room')
+            ->get();
+        return view('admin.view_history', ['index' => 1, 'checkout' => $data, 'customer' => $customer, 'rooms' => $room]);
     }
 
     public function getInfo($id)

@@ -134,6 +134,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="admin/nhan-phong">
+                        <i class="pe-7s-graph"></i>
+                        <p>Nhận phòng <span style="color:blue" id="numb-rooms"></span></p>
+                    </a>
+                </li>
+                <li>
                     <a href="admin/checkout">
                         <i class="pe-7s-graph"></i>
                         <p>Checkout <span style="color:blue" id="numb-room-checkout"></span></p>
@@ -168,6 +174,9 @@
                 success: function(rs) {
                     var htmlCheckin = `(${rs.checkin})`;
                     $('#numb-room-checkin').html(htmlCheckin);
+
+                    var htmlRoom = `(${rs.room})`;
+                    $('#numb-rooms').html(htmlRoom);
 
                     var htmlCheckout = `(${rs.checkout})`;
                     $('#numb-room-checkout').html(htmlCheckout);
