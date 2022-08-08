@@ -82,7 +82,9 @@
                                     </td>
                                     <td class="text-right" style="text-align: center;">
                                         <button type="button" class="btn btn-info btn-success btn-icon edit"
-                                            data-toggle="modal" onclick=""><i class="fa fa-print"></i></button>
+                                            data-toggle="modal"><a target="_blank"
+                                                href="{{ url('/admin/print/' . $data->id_checkin_room) }}"><i
+                                                    class="fa fa-print"></i></a></button>
 
                                     </td>
                                 </tr>

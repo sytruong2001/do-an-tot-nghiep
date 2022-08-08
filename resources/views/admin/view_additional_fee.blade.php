@@ -34,7 +34,7 @@
                     </td>
                     <td>
                         <div style='height: 100px; overflow: auto;'>
-                            {{ $data->price }} VNĐ
+                            {{ number_format($data->price, 0, ',', '.') }} đ
                         </div>
                     </td>
 

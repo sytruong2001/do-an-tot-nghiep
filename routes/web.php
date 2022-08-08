@@ -85,7 +85,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::controller(checkoutController::class)->group(function () {
         Route::get('/checkout', 'index')->name('checkout.createCheckout');
         Route::get('/history', 'history')->name('checkout.history');
+        Route::get('/print/{id}', 'print')->name('checkout.print');
     });
+
 
     Route::controller(RoomController::class)->group(function () {
         Route::get('/clean', 'getRoom')->name('room.clean');

@@ -11,6 +11,7 @@ use App\Models\RoomModel;
 use App\Models\ServicesModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use PDF;
 
 class checkoutController extends Controller
 {
@@ -62,6 +63,47 @@ class checkoutController extends Controller
             'index' => 1,
             'sum_services' => 0,
             'sum_additional-fee' => 0,
+        ]);
+    }
+
+    public function print($id)
+    {
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($this->print_checkout($id));
+        return $pdf->stream();
+    }
+
+    public function print_checkout($id)
+    {
+        $dt = Carbon::now();
+        $day = $dt->day;
+        $month = $dt->month;
+        $year = $dt->year;
+        $get_info_checkin = CheckInModel::query()
+            ->join("rooms", "checkin.id_room", "=", "rooms.id_room")
+            ->where('id_checkin_room', $id)->get();
+        $get_info_checkout = CheckOutModel::query()
+            ->where('id_checkin_room', $id)->get();
+        $get_info_customer = CustomersModel::query()->where('id_checkin_room', $id)->get();
+        $get_info_service = ServicesModel::query()->where([
+            ['id_checkin_room', '=', $id],
+            ['status', '=', 0],
+        ])->get();
+        $get_info_add = AdditionalFeeModel::query()->where([
+            ['id_checkin_room', '=', $id],
+            ['status', '=', 0],
+        ])->get();
+        return view('admin.view_print', [
+            'checkin' => $get_info_checkin,
+            'checkout' => $get_info_checkout,
+            'customers' => $get_info_customer,
+            'services' => $get_info_service,
+            'additional_fee' => $get_info_add,
+            'index' => 1,
+            'money' => 0,
+            'day' => $day,
+            'month' => $month,
+            'year' => $year,
         ]);
     }
 }
