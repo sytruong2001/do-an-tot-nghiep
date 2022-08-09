@@ -102,18 +102,18 @@
                 success: function(res) {
                     console.log(res);
                     $("#rooms-content").html("");
-                    res.room[0].forEach((item) => {
+                    res.rooms.forEach((item) => {
                         var htmlRoom = `
-                    <div class="col-md-3" onclick="create(${item.id_room})">
-                        <div class="card card-user" style="background-color: gray">
-                            <div class="image">
-                                <img src="https://hotlinedatphong.com/wp-content/uploads/2020/10/khach-san-muong-thanh-holiday-mui-ne-24-800x450-1.jpg"
-                                    alt="..." />
-                            </div>
-                            <h3 style="text-align: center; padding-bottom:10px"><b>${item.name}</b></h3>
+                <div class="col-md-3" onclick="create(${item.id_room})">
+                    <div class="card card-user" style="background-color: gray">
+                        <div class="image">
+                            <img src="https://hotlinedatphong.com/wp-content/uploads/2020/10/khach-san-muong-thanh-holiday-mui-ne-24-800x450-1.jpg"
+                                alt="..." />
                         </div>
+                        <h3 style="text-align: center; padding-bottom:10px"><b>${item.name}</b></h3>
                     </div>
-                    `;
+                </div>
+                `;
                         $("#rooms-content").append(htmlRoom);
 
                     });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\AdditionalFeeModel;
 use App\Models\CheckInModel;
+use App\Models\CustomersModel;
 use App\Models\PriceRoomModel;
 use App\Models\ServicesModel;
 use Illuminate\Http\Request;
@@ -23,6 +24,9 @@ class checkoutApi extends Controller
             ->where('id_checkin_room', $id)
             ->select('rooms.id_type_room')
             ->first();
+        $get_customer = CustomersModel::query()
+            ->where('id_checkin_room', $id)
+            ->get();
         $id_type_room = $get_type_room->id_type_room;
 
         $price_services = ServicesModel::select(DB::raw("SUM(price) as price_services"))
@@ -38,6 +42,7 @@ class checkoutApi extends Controller
             ->where('id_type_room', $id_type_room)
             ->get();
         $json['checkin'] = $get_checkin;
+        $json['customer'] = $get_customer;
         $json['price_hour'] = $get_price;
         $json['price_services'] = $price_services;
         $json['price_additional_fee'] = $price_additional_fee;

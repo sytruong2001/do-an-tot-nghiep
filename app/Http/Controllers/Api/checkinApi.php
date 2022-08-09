@@ -19,6 +19,14 @@ class checkinApi extends Controller
         $json['type'] = $type_room;
         echo json_encode($json);
     }
+    public function getCheckin($id)
+    {
+        $checkin = CheckInModel::query()->where('id_checkin_room', $id)->get();
+        $type_room = DB::table('type_room')->get();
+        $json['checkin'] = $checkin;
+        $json['type'] = $type_room;
+        echo json_encode($json);
+    }
 
     public function create(Request $request)
     {
@@ -30,14 +38,15 @@ class checkinApi extends Controller
                     'time_start' => $request->time_start,
                     'time_end' => $request->time_end,
                     'id_room' => $request->id_room,
-                    'status' => 0,
+                    'deposit' => 0,
+                    'status' => 2,
                 ]);
 
-            $update_status_room = DB::table('rooms')
-                ->where('id_room', $request->id_room)
-                ->update([
-                    'status' => 1,
-                ]);
+            // $update_status_room = DB::table('rooms')
+            //     ->where('id_room', $request->id_room)
+            //     ->update([
+            //         'status' => 1,
+            //     ]);
 
             $get_id_checkin = CheckInModel::query()->orderByDesc('id_checkin_room')->first();
             $id_checkin = $get_id_checkin->id_checkin_room;
@@ -60,6 +69,66 @@ class checkinApi extends Controller
         }
     }
 
+    public function update($id)
+    {
+        $update_status_checkin = DB::table('checkin')
+            ->where('id_checkin_room', $id)
+            ->update([
+                'status' => 0,
+            ]);
+        $json['code'] = 200;
+        echo json_encode($json);
+    }
+    public function cancel($id)
+    {
+        $update_status_checkin = DB::table('checkin')
+            ->where('id_checkin_room', $id)
+            ->update([
+                'status' => 3,
+            ]);
+        $json['code'] = 200;
+        echo json_encode($json);
+    }
+
+    public function booking(Request $request)
+    {
+        $check_status_room = DB::table('rooms')->where('id_room', $request->id_room)->select('status')->first();
+        $status_room = $check_status_room->status;
+        if ($status_room == 0) {
+            $create = DB::table('checkin')
+                ->insert([
+                    'time_start' => $request->time_start,
+                    'time_end' => $request->time_end,
+                    'id_room' => $request->id_room,
+                    'deposit' => $request->deposit,
+                    'status' => 2,
+                ]);
+
+            // $update_status_room = DB::table('rooms')
+            //     ->where('id_room', $request->id_room)
+            //     ->update([
+            //         'status' => 1,
+            //     ]);
+
+            $get_id_checkin = CheckInModel::query()->orderByDesc('id_checkin_room')->first();
+            $id_checkin = $get_id_checkin->id_checkin_room;
+
+
+            $create_customer = CustomersModel::create([
+                'name' => $request->name,
+                'identify_numb' => $request->identify,
+                'id_checkin_room' => $id_checkin,
+            ]);
+
+            $json['code'] = 200;
+            echo json_encode($json);
+        } else {
+            $json['error'] = "Trạng thái phòng hiện không trống!";
+            $json['code'] = 500;
+            echo json_encode($json);
+        }
+    }
+
     public function searchRoom(Request $request)
     {
         $name = $request->get('name');
@@ -73,38 +142,34 @@ class checkinApi extends Controller
 
     public function searchDateCheckin(Request $request)
     {
-        $start_date = $request->get('start_date');
-        $end_date = $request->get('end_date');
         $checkin = CheckInModel::query()
-            ->where('time_start', '>=', $start_date)
-            ->where('time_end', '<=', $end_date)
-            ->where('status', 0)
+            ->where([
+                ['time_start', '<=', $request->start_date],
+                ['time_end', '>=', $request->end_date],
+                ['status', '<>', 1],
+                ['status', '<>', 3],
+            ])
+            ->orWhere([
+                ['time_end', '>=', $request->start_date],
+                ['time_end', '<=', $request->end_date],
+                ['status', '<>', 3],
+                ['status', '<>', 1],
+            ])
+            ->orWhere([
+                ['time_start', '>=', $request->start_date],
+                ['time_start', '<=', $request->end_date],
+                ['status', '<>', 3],
+                ['status', '<>', 1],
+            ])
             ->select('id_room')
             ->get();
-        $check = CheckInModel::query()
-            ->where('time_start', '>=', $start_date)
-            ->where('time_end', '<=', $end_date)
-            ->where('status', 0)
-            ->count();
-        $resultArray = [];
-        if ($check != 0) {
-            foreach ($checkin as $item) {
-                $query = DB::table('rooms')
-                    ->where('rooms.id_room', '<>', $item->id_room)
-                    ->where('rooms.status', 0)
-                    ->get();
-                array_push($resultArray, $query);
-            }
-        } else {
-            $query = DB::table('rooms')
-                ->where('rooms.status', 0)
-                ->get();
-            array_push($resultArray, $query);
+        $array = [];
+        foreach ($checkin as $value) {
+            array_push($array, $value->id_room);
         }
-
-        $type_room = DB::table('type_room')->get();
-        $json['room'] = $resultArray;
-        $json['type'] = $type_room;
+        $room = RoomModel::with('type_room')->where('status', 0)->whereNotIn('id_room', $array)->get();
+        $json['checkins'] = $array;
+        $json['rooms'] = $room;
         echo json_encode($json);
     }
 }

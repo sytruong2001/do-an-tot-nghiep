@@ -262,17 +262,17 @@ function create(id) {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Họ và Tên</label>
-                                <input type="text" class="form-control" id="name${x}" name="name${x}"
+                                <input type="text" class="form-control" id="name" name="name"
                                     value="">
-                                <span class="text-danger error-text name_error_${x}"></span>
+                                <span class="text-danger error-text name_error_"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Số CMT/CCCD</label>
-                                <input type="number" class="form-control" id="identify${x}" name="identify${x}"
+                                <input type="number" class="form-control" id="identify" name="identify"
                                     value="">
-                                <span class="text-danger error-text identify_error_${x}"></span>
+                                <span class="text-danger error-text identify_error_"></span>
                             </div>
                         </div>
                     </div>`;
@@ -362,7 +362,149 @@ function create(id) {
         },
     });
 }
+// tạo phiếu nhận phòng khi đã đặt phòng
+function update(id) {
+    $.ajax({
+        url: "/api/admin/get_checkin/" + id,
+        type: "get",
+        dataType: "json",
+        success: function (rs) {
+            var html = ``;
+            html += `
+            <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="content content-full-width">
+                                    <ul role="tablist" class="nav nav-tabs">
+                                        <li role="presentation" class="active">
+                                            <a href="#icon-info" data-toggle="tab"><i class="fa fa-info"></i> Thông tin thời gian thuê phòng</a>
+                                        </li>
 
+                                    </ul>`;
+            rs.checkin.forEach((time) => {
+                html += `
+                <div class="tab-content">
+                    <div id="icon-info" class="tab-pane active">
+                        <div class="card">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Thời gian bắt đầu</label>
+                                            <input type="text" class="form-control" id="time_start"
+                                                name="time_start" value="${time.time_start}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Thời gian kết thúc</label>
+                                            <input type="text" class="form-control" id="time_end"
+                                                name="time_end" value="${time.time_end}" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                `;
+            });
+            html += `
+
+                                </div>
+
+                                <div class="content content-full-width">
+                                    <ul role="tablist" class="nav nav-tabs">
+                                        <li role="presentation" class="active">
+                                            <a href="#icon-info" data-toggle="tab"><i class="fa fa-user"></i> Thông tin khách hàng</a>
+                                        </li>
+
+                                    </ul>
+
+                                    <div class="tab-content">
+                                        <div id="icon-info" class="tab-pane active">
+                                            <div class="card">
+                                                <div class="content">`;
+            rs.customer.forEach((data) => {
+                html += `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Họ và Tên</label>
+                                <input type="text" class="form-control" id="name" name="name"
+                                    value="${data.name}">
+                                <span class="text-danger error-text name_error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Số CMT/CCCD</label>
+                                <input type="number" class="form-control" id="identify" name="identify"
+                                    value="${data.identify_numb}">
+                                <span class="text-danger error-text identify_error"></span>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-primary" id="btn-submit" onclick="submit(${data.id_checkin_room})">Nhận phòng</button>
+                                    <button class="btn btn-danger" id="btn-cancel" onclick="cancel(${data.id_checkin_room})">Hủy đặt phòng</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card card-user">
+                                <div class="image">
+                                    <img src="../img/bg10.jpg" alt="..." />
+                                </div>`;
+            });
+            rs.checkin.forEach((data1) => {
+                html += `
+                            <div class="content" style="background:lightblue">
+                                <h3 style="text-align:center"><b>Số phòng: ${data1.name}</b></h3>
+                                <b>Số lượng khách sử dụng:</b><br>
+                                <b>- Người lớn: ${data1.adults} <i class="fa fa-user"></i> </b><br>
+                                <b>- Trẻ nhỏ: ${data1.children} <i class="fa fa-user"></i> </b><br>
+                            </div>`;
+            });
+
+            html += `</div>
+                        </div>
+                    </div>
+            `;
+            $(".content").html(html);
+        },
+    });
+}
+function submit(id) {
+    $.ajax({
+        url: "/api/admin/update_checkin/" + id,
+        type: "post",
+        dataType: "json",
+        success: function (rs) {
+            onFinishWizard();
+            setTimeout("location.reload(true);", 500);
+        },
+    });
+}
+
+function cancel(id) {
+    $.ajax({
+        url: "/api/admin/cancel_checkin/" + id,
+        type: "post",
+        dataType: "json",
+        success: function (rs) {
+            onFinishWizard();
+            setTimeout("location.reload(true);", 500);
+        },
+    });
+}
 function onFinishWizard() {
     swal("Hoàn tất!", "Thành công", "success");
 }

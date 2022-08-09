@@ -9,7 +9,7 @@ class CheckInModel extends Model
 {
     public $timestamps = false;
     protected $fillable = [
-        "time_start", "time_end", "id_room", "status",
+        "time_start", "time_end", "id_room", "deposit", "status",
     ];
 
     protected $primaryKey = "id_checkin_room";

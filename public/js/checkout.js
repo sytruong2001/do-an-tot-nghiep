@@ -95,6 +95,16 @@ function create(id) {
                 $("#all-services").html(html_services);
                 total += Number(data_services.price_services);
             });
+            // tiền cọc
+            rs.checkin.forEach((data_deposit) => {
+                var deposit = convertMoney(data_deposit.deposit);
+                var html_deposit = `
+                    <label>Tổng đã đặt cọc:</label>
+                    <input type="text" class="form-control" id="deposit" name="deposit" style="color:green; text-align:right" value="${deposit}" disabled>
+                    </input>`;
+                $("#deposit").html(html_deposit);
+                total -= Number(data_deposit.deposit);
+            });
             // tổng số tiền thanh toán
             var total_price = convertMoney(total);
             var html_total_price = `

@@ -30,9 +30,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('customer.view_booking');
 });
 
+Route::controller(checkinController::class)->group(function () {
+    Route::get('/dat-phong/{id}/{start}/{end}', 'bookingRoom')->name('checkin.bookingRoom');
+});
 Route::get('/login', function () {
     return view('auth.login');
 });
@@ -77,7 +80,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/detail-checkout/{id}', [checkoutController::class, 'getInfo'])->name('admin.getInfoCheckout');
 
     Route::controller(checkinController::class)->group(function () {
-        Route::get('/checkin', 'index')->name('checkin.createCheckin');
+        Route::get('/checkin', 'index')->name('checkin.createCheckinRoom');
 
         Route::get('/nhan-phong', 'getInfo')->name('checkin.getInfo');
     });
@@ -99,6 +102,8 @@ Route::prefix('api')->group(function () {
 
     Route::get('/get_type_room/{id}', [typeRoomApi::class, 'getinfo'])->name('typeroom.getInfoTypeRoom');
     Route::get('/get_price_room/{id}', [priceRoomApi::class, 'getinfo'])->name('priceroom.getInfoPriceRoom');
+
+    Route::get('/search-booking', [RoomApi::class, 'searchBooking'])->name('rooms.searchBooking');
 
     Route::middleware(['auth', 'role:superadmin'])->prefix('superadmin')->group(function () {
         // loại phòng
@@ -132,7 +137,10 @@ Route::prefix('api')->group(function () {
         Route::post('/search-price-room/{id}', [RoomApi::class, 'searchPriceRoom'])->name('rooms.searchForPriceRoom');
 
         Route::post('/create_checkin', [checkinApi::class, 'create'])->name('checkin.createCheckin');
+        Route::post('/update_checkin/{id}', [checkinApi::class, 'update'])->name('checkin.updateCheckin');
+        Route::post('/cancel_checkin/{id}', [checkinApi::class, 'cancel'])->name('checkin.cancelCheckin');
         Route::get('/get_checkin/{id}', [checkoutApi::class, 'getInfo'])->name('checkout.getCheckin');
+        // Route::get('/get_booking/{id}', [checkintApi::class, 'getBooking'])->name('checkout.getBookingRoom');
         Route::post('/search-checkin', [checkinApi::class, 'searchRoom'])->name('checkin.searchCheckin');
         Route::get('/search-date-checkin', [checkinApi::class, 'searchDateCheckin'])->name('checkin.searchDateCheckin');
 
@@ -156,5 +164,7 @@ Route::prefix('api')->group(function () {
     Route::post('/change-password', [AccountApi::class, 'changePassword'])->name('admin.changePassword');
 
     Route::get('/get-status-room', [RoomApi::class, 'getStatusRoom'])->name('room.getStatusRoom');
+
+    Route::post('/create_booking', [checkinApi::class, 'booking'])->name('checkin.createBooking');
 });
 require __DIR__ . '/auth.php';

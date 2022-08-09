@@ -24,14 +24,16 @@
                     </div>
                     <div class="row" id="rooms-content">
                         @foreach ($rooms as $data)
-                            <div class="col-md-3" onclick="create({{ $data->id_room }})">
+                            <div class="col-md-3" onclick="update({{ $data->id_checkin_room }})">
                                 <div class="card card-user" style="background-color: gray">
                                     <div class="image">
                                         <img src="https://hotlinedatphong.com/wp-content/uploads/2020/10/khach-san-muong-thanh-holiday-mui-ne-24-800x450-1.jpg"
                                             alt="..." />
                                     </div>
                                     <h3 style="text-align: center; padding-bottom:10px"><b>{{ $data->name }}</b></h3>
-                                    </h3>
+                                    <p style="text-align: center; padding-bottom:10px; color: blue">
+                                        Ngày nhận: <b>{{ $data->time_start }}</b>
+                                    </p>
                                 </div>
                             </div>
                         @endforeach

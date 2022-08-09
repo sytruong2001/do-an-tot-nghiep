@@ -33,8 +33,9 @@
                                                 alt="..." />
                                         </div>
                                         <h3 style="text-align: center; padding-bottom:10px"><b>{{ $data->name }}</b></h3>
-                                        <b>Thời gian trả phòng:</b>
-                                        <h5 style="text-align: center; padding-bottom:10px">{{ $data->time_end }}</h5>
+                                        <h5 style="text-align: center; padding-bottom:10px">
+                                            <b>Ngày trả phòng:</b> {{ $data->time_end }}
+                                        </h5>
                                     </div>
                                 </div>
                             </a>
