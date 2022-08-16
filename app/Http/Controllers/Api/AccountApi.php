@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\InfoUserModel;
 use App\Models\User;
+use App\Notifications\PaymentNotifycation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 
 class AccountApi extends Controller
 {
@@ -111,6 +113,19 @@ class AccountApi extends Controller
                 ]);
             }
 
+            $user = User::first();
+
+            $payment = [
+                'title' => 'Thông báo xác nhận đặt phòng khách sạn SN',
+                'infoCustomer' => 'Họ và tên khách hàng: ' . $user->name . ', Số CMT/CCCD: 0012015230',
+                'infoRoom' => 'Số phòng: P101s',
+                'time' => 'Thời gian nhận phòng: 2022-08-16, Thời gian trả phòng: 2022-08-18',
+                'price' => 'Tổng tiền: 1.000.000, Tiền đã đặt cọc: 200.000',
+                'text' => 'Xem chi tiết',
+                'url' => url('/superadmin/account'),
+
+            ];
+            Notification::send($user, new PaymentNotifycation($payment));
 
             if (!$query && !$info_user) {
                 return response()->json(['status' => 0, 'msg' => 'Lỗi.']);

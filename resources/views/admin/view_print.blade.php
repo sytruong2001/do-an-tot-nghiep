@@ -187,23 +187,28 @@
                 <hr>
                 @foreach ($customers as $cus)
                     <div class="row">
-                        <div class="col-s-12">Họ và tên khách hàng: <b>{{ $cus->name }}</b></div>
+                        <div class="col-s-4">Họ và tên khách hàng</div>
+                        <div class="col-s-8">: <b>{{ $cus->name }}</b></div>
                     </div>
                     <div class="row">
-                        <div class="col-s-12">Số CMT/ CCCD: <b>{{ $cus->identify_numb }}</b></div>
+                        <div class="col-s-4">Số CMT/ CCCD</div>
+                        <div class="col-s-8">: <b>00{{ $cus->identify_numb }}</b></div>
                     </div>
                 @endforeach
                 @foreach ($checkin as $check)
                     <div class="row">
-                        <div class="col-s-12">Số phòng: <b>{{ $check->name }}</b></div>
+                        <div class="col-s-4">Số phòng</div>
+                        <div class="col-s-8">: <b>{{ $check->name }}</b></div>
                     </div>
                 @endforeach
                 @foreach ($checkout as $item)
                     <div class="row">
-                        <div class="col-s-12">Thời gian thuê phòng: <b>{{ $item->time_start }}</b></div>
+                        <div class="col-s-4">Thời gian thuê phòng</div>
+                        <div class="col-s-8">: <b>{{ $item->time_start }}</b></div>
                     </div>
                     <div class="row">
-                        <div class="col-s-12">Thời gian trả phòng: <b>{{ $item->time_end }}</b></div>
+                        <div class="col-s-4">Thời gian trả phòng</div>
+                        <div class="col-s-8">: <b>{{ $item->time_end }}</b></div>
                     </div>
                 @endforeach
                 <div class="row">

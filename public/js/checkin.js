@@ -173,24 +173,24 @@ function create(id) {
     }
     let cMonth = currentDate.getMonth() + 1;
     let cYear = currentDate.getFullYear();
-    let cHour = currentDate.getHours();
-    if (cHour >= 10) {
-        cHour = cHour;
-    } else {
-        cHour = "0" + cHour;
-    }
-    let cMinute = currentDate.getMinutes();
-    if (cMinute >= 10) {
-        cMinute = cMinute;
-    } else {
-        cMinute = "0" + cMinute;
-    }
-    let cTime = cHour + ":" + cMinute;
+    // let cHour = currentDate.getHours();
+    // if (cHour >= 10) {
+    //     cHour = cHour;
+    // } else {
+    //     cHour = "0" + cHour;
+    // }
+    // let cMinute = currentDate.getMinutes();
+    // if (cMinute >= 10) {
+    //     cMinute = cMinute;
+    // } else {
+    //     cMinute = "0" + cMinute;
+    // }
+    // let cTime = cHour + ":" + cMinute;
     let currentTime;
     if (cMonth < 10) {
-        currentTime = cYear + "-0" + cMonth + "-" + cDay + "T" + cTime;
+        currentTime = cYear + "-0" + cMonth + "-" + cDay;
     } else {
-        currentTime = cYear + "-" + cMonth + "-" + cDay + "T" + cTime;
+        currentTime = cYear + "-" + cMonth + "-" + cDay;
     }
 
     $.ajax({
@@ -219,14 +219,15 @@ function create(id) {
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Thời gian bắt đầu</label>
-                                                    <input type="datetime-local" class="form-control" id="time_start"
-                                                        name="time_start" value="${currentTime}" readonly>
+                                                    <input type="date" class="form-control" id="time_start"
+                                                        name="time_start" min="${currentTime}" value="${currentTime}" oninput="choose()">
+                                                    <span class="text-danger error-text time_start_error"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <div class="form-group">
+                                                <div class="form-group" id="location-time-end">
                                                     <label>Thời gian kết thúc</label>
-                                                    <input type="datetime-local" class="form-control" id="time_end"
+                                                    <input type="date" class="form-control" id="time_end"
                                                         name="time_end" min="${currentTime}">
                                                     <span class="text-danger error-text time_end_error"></span>
                                                 </div>
@@ -262,17 +263,17 @@ function create(id) {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Họ và Tên</label>
-                                <input type="text" class="form-control" id="name" name="name"
+                                <input type="text" class="form-control" id="name${x}" name="name${x}"
                                     value="">
-                                <span class="text-danger error-text name_error_"></span>
+                                <span class="text-danger error-text name_error_${x}"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Số CMT/CCCD</label>
-                                <input type="number" class="form-control" id="identify" name="identify"
+                                <input type="number" class="form-control" id="identify${x}" name="identify${x}"
                                     value="">
-                                <span class="text-danger error-text identify_error_"></span>
+                                <span class="text-danger error-text identify_error_${x}"></span>
                             </div>
                         </div>
                     </div>`;
@@ -314,6 +315,7 @@ function create(id) {
 
             $("#frm").on("submit", function (e) {
                 e.preventDefault();
+                var time_start = $("#time_start").val();
                 var time_end = $("#time_end").val();
                 var name_1 = $("#name1").val();
                 var identify_1 = $("#identify1").val();
@@ -335,6 +337,9 @@ function create(id) {
                         "Chưa điền số CMT/CCCD người nhận phòng."
                     );
                 }
+                console.log(time_start);
+                console.log(time_end);
+
                 if (time_end != "" && name_1 != "" && identify_1 != "") {
                     $.ajax({
                         url: "/api/admin/create_checkin",
@@ -361,6 +366,19 @@ function create(id) {
             });
         },
     });
+}
+
+function choose() {
+    var id_room = $("#id_room").val();
+    var time_start = $("#time_start").val();
+    console.log(id_room);
+    var html = `
+        <label>Thời gian kết thúc</label>
+        <input type="date" class="form-control" id="time_end"
+            name="time_end" min="${time_start}">
+        <span class="text-danger error-text time_end_error"></span>
+    `;
+    $("#location-time-end").html(html);
 }
 // tạo phiếu nhận phòng khi đã đặt phòng
 function update(id) {

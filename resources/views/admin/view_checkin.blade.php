@@ -11,7 +11,7 @@
 
             <div class="card">
                 <div class="header">
-                    <legend>Quản lý đặt phòng</legend>
+                    <legend>Quản lý đặt phòng -- Phòng chưa đặt trong 7 ngày kế tiếp</legend>
                 </div>
                 <div class="content">
                     <div class="row">

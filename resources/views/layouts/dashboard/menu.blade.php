@@ -71,12 +71,12 @@
                     </a>
                     <div class="collapse" id="chart">
                         <ul class="nav">
-                            <li>
+                            {{-- <li>
                                 <a href="superadmin/so-luong-khach">
                                     <span class="sidebar-mini">DC</span>
                                     <span class="sidebar-normal">Lượng khách mỗi ngày</span>
                                 </a>
-                            </li>
+                            </li> --}}
                             <li>
                                 <a href="superadmin/doanh-so">
                                     <span class="sidebar-mini">NRU</span>

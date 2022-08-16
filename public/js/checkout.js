@@ -106,7 +106,13 @@ function create(id) {
                 total -= Number(data_deposit.deposit);
             });
             // tổng số tiền thanh toán
-            var total_price = convertMoney(total);
+            var total_price;
+            if (total < 0) {
+                total_price = 0;
+            } else {
+                total_price = convertMoney(total);
+            }
+
             var html_total_price = `
                     <label>Tổng tiền:</label>
                     <input type="text" class="form-control" id="total-price" name="total-price" style="color:green; text-align:right" value="${total_price}" disabled>
@@ -207,9 +213,9 @@ function convertTime(time) {
     let cTime = cHour + ":" + cMinute;
     let currentTime;
     if (cMonth < 10) {
-        currentTime = cYear + "-0" + cMonth + "-" + cDay + " " + cTime;
+        currentTime = cYear + "-0" + cMonth + "-" + cDay;
     } else {
-        currentTime = cYear + "-" + cMonth + "-" + cDay + " " + cTime;
+        currentTime = cYear + "-" + cMonth + "-" + cDay;
     }
     return currentTime;
 }

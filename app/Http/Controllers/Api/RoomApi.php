@@ -162,16 +162,51 @@ class RoomApi extends Controller
             ->where([
                 ['time_start', '<=', $request->start],
                 ['time_end', '>=', $request->end],
+                ['status', '<>', 3],
                 ['status', '<>', 1],
             ])
             ->orWhere([
                 ['time_end', '>=', $request->start],
                 ['time_end', '<=', $request->end],
+                ['status', '<>', 3],
                 ['status', '<>', 1],
             ])
             ->orWhere([
                 ['time_start', '>=', $request->start],
                 ['time_start', '<=', $request->end],
+                ['status', '<>', 3],
+                ['status', '<>', 1],
+            ])
+            ->select('id_room')
+            ->get();
+        $array = [];
+        foreach ($checkin as $value) {
+            array_push($array, $value->id_room);
+        }
+        $room = RoomModel::with('type_room')->where('status', 0)->whereNotIn('id_room', $array)->get();
+        $json['checkins'] = $array;
+        $json['rooms'] = $room;
+        echo json_encode($json);
+    }
+    public function getTimeEnd(Request $request)
+    {
+        $checkin = CheckInModel::query()
+            ->where([
+                ['time_start', '<=', $request->start],
+                ['time_end', '>=', $request->end],
+                ['status', '<>', 3],
+                ['status', '<>', 1],
+            ])
+            ->orWhere([
+                ['time_end', '>=', $request->start],
+                ['time_end', '<=', $request->end],
+                ['status', '<>', 3],
+                ['status', '<>', 1],
+            ])
+            ->orWhere([
+                ['time_start', '>=', $request->start],
+                ['time_start', '<=', $request->end],
+                ['status', '<>', 3],
                 ['status', '<>', 1],
             ])
             ->select('id_room')

@@ -22,19 +22,6 @@
         </div> <!-- end card -->
 
     </div> <!-- end col-md-12 -->
-
-    <div class="col-md-12">
-
-        <div class="card">
-            <div class="header">
-                <legend>Danh sách chi tiết doanh thu</legend>
-            </div>
-            <div class="content">
-                {{-- @include('admin.chart.view_recharge_list') --}}
-            </div>
-        </div> <!-- end card -->
-
-    </div> <!-- end col-md-12 -->
 @endsection
 
 @push('js')

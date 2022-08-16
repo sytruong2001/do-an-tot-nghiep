@@ -9,9 +9,9 @@ $(document).ready(function () {
 getInfo();
 function getInfo() {
     const path = location.pathname;
-    var id = path.substring(11, 12);
-    var start = path.substring(13, 29);
-    var end = path.substring(30, 46);
+    const start = $("#time_start").val();
+    const end = $("#time_end").val();
+    const id = $("#id-room").val();
 
     let start_time = new Date(start);
     let end_time = new Date(end);
@@ -19,8 +19,11 @@ function getInfo() {
         Number(end_time) / (1000 * 60 * 60) -
         Number(start_time) / (1000 * 60 * 60)
     ).toFixed(0);
-    $("#total_time").val(total_time);
 
+    console.log(total_time);
+    console.log(id);
+
+    $("#total_time").val(total_time);
     var first = Number($("#first").val());
     var next = Number($("#next").val());
     var total_money;
@@ -32,7 +35,7 @@ function getInfo() {
     $("#total").val(convertMoney(total_money));
     $("#tien-coc").val(convertMoney(total_money * 0.2));
     $("#deposit").val(total_money * 0.2);
-    console.log(total_money);
+    // console.log(total_money);
 }
 function convertMoney(number) {
     let num = new Intl.NumberFormat("vi", {
@@ -51,6 +54,7 @@ $("#frm").on("submit", function (e) {
     var deposit = $("#deposit").val();
     $("span.name_error").empty();
     $("span.identify_error").empty();
+
     if (name === "") {
         $("span.name_error").html("Chưa điền tên người nhận phòng.");
     }
@@ -59,7 +63,10 @@ $("#frm").on("submit", function (e) {
             "Chưa điền số CMT/CCCD người nhận phòng."
         );
     }
-    if (name != "" && identify != "") {
+    if (identify.length < 12 || identify.length > 12) {
+        $("span.identify_error").html("Độ dài số điện thoại phải là 12 chữ số");
+    }
+    if (name != "" && identify != "" && identify.length === 12) {
         $.ajax({
             url: "/api/create_booking",
             type: "post",
@@ -73,14 +80,8 @@ $("#frm").on("submit", function (e) {
             },
             dataType: "json",
             success: function (data) {
-                if (data.code == 200) {
-                    onFinishWizard();
-                    setTimeout("location.reload(true);", 500);
-                } else {
-                    $("#insertForm").modal("show");
-                    $("#exampleModalLongTitle").html("Xảy ra lỗi");
-                    $(".modal-body").html(data.error);
-                }
+                // console.log(data);
+                window.location = data;
             },
         });
     }

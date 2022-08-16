@@ -19,6 +19,9 @@
                             <input type="text" class="form-control" id="search-room"
                                 placeholder="Nhập số CMT/CCCD bạn muốn tìm" oninput="searchRoom()">
                         </div>
+                        <button class="btn btn-success"><a href="{{ url('/admin/checkin-today/') }}"
+                                style="text-decoration: none; color: white"><i>Phòng hôm nay khách nhận <b
+                                        style="color: aqua">( {{ $numb }} )</b></a></button>
                         <hr style="border: none">
                         <hr style="border: none">
                     </div>

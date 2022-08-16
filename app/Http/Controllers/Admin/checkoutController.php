@@ -17,13 +17,31 @@ class checkoutController extends Controller
 {
     public function index()
     {
-        // $today = Carbon::today();
+        $end_date = Carbon::today();
         $data = RoomModel::query()
             ->join('checkin', 'rooms.id_room', '=', 'checkin.id_room')
             ->where('checkin.status', 0)
-            // ->where('checkin.time_end', $today)
+            ->orderBy('checkin.time_end', 'asc')
             ->get();
-        return view('admin.view_checkout', ['rooms' => $data]);
+        $get_info = CheckInModel::query()
+            ->where('checkin.status', 0)
+            ->whereDate('checkin.time_end', $end_date)
+            ->count();
+        return view('admin.view_checkout', ['rooms' => $data, 'numb' => $get_info]);
+    }
+    public function searchCheckoutToday()
+    {
+        $end_date = Carbon::today();
+        $data = RoomModel::query()
+            ->join('checkin', 'rooms.id_room', '=', 'checkin.id_room')
+            ->where('checkin.status', 0)
+            ->whereDate('checkin.time_end', $end_date)
+            ->get();
+        $get_info = CheckInModel::query()
+            ->where('checkin.status', 0)
+            ->whereDate('checkin.time_end', $end_date)
+            ->count();
+        return view('admin.view_checkout', ['rooms' => $data, 'numb' => $get_info]);
     }
 
     public function history()

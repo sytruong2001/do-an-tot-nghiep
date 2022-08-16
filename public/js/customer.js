@@ -23,39 +23,39 @@ function getInfo() {
     } else {
         cHour = "0" + cHour;
     }
-    let cMinute = currentDate.getMinutes();
-    if (cMinute >= 10) {
-        cMinute = cMinute;
-    } else {
-        cMinute = "0" + cMinute;
-    }
-    let cTime = cHour + ":" + cMinute;
+    // let cMinute = currentDate.getMinutes();
+    // if (cMinute >= 10) {
+    //     cMinute = cMinute;
+    // } else {
+    //     cMinute = "0" + cMinute;
+    // }
+    // let cTime = cHour + ":" + cMinute;
     let currentTime;
     if (cMonth < 10) {
-        currentTime = cYear + "-0" + cMonth + "-" + cDay + "T" + cTime;
+        currentTime = cYear + "-0" + cMonth + "-" + cDay;
     } else {
-        currentTime = cYear + "-" + cMonth + "-" + cDay + "T" + cTime;
+        currentTime = cYear + "-" + cMonth + "-" + cDay;
     }
     var htmlStart = `
-        <b>Check-in</b>
+        <b>Thời gian nhận phòng</b>
         <div class="input-group">
             <span class="input-group-addon">
                 <i class="fa fa-calendar"></i>
             </span>
-            <input type="datetime-local" class="form-control" id="time_start" name="time_start" min="${currentTime}" oninput="choose()">
+            <input type="date" class="form-control" id="time_start" name="time_start" min="${currentTime}" oninput="choose()">
             <span class="text-danger error-text time_start_error" style="font-size:15px"></span>
         </div>
     `;
     $("#check-in").html(htmlStart);
 
     var htmlEnd = `
-        <b>Check-out</b>
+        <b>Thời gian trả phòng</b>
         <div class="input-group">
             <span class="input-group-addon">
                 <i class="fa fa-calendar"></i>
             </span>
             <span id="set-min-time">
-            <input type="datetime-local" class="form-control" id="time_end" name="time_end" min="${currentTime}">
+            <input type="date" class="form-control" id="time_end" name="time_end" min="${currentTime}">
             <span class="text-danger error-text time_end_error" style="font-size:15px"></span>
             </span>
         </div>
@@ -68,7 +68,7 @@ function choose() {
     var time_start = $("#time_start").val();
     console.log(time_start);
     var html = `
-        <input type="datetime-local" class="form-control" id="time_end" name="time_end" min="${time_start}">
+        <input type="date" class="form-control" id="time_end" name="time_end" min="${time_start}">
         <span class="text-danger error-text time_end_error" style="font-size:15px"></span>
     `;
     $("#set-min-time").html(html);
@@ -111,8 +111,13 @@ function searchRoomNow() {
                                     <h3 class="card-title">${room.name}</h3>
                                 </a>
                                 <p class="card-description">
-                                Loại phòng: ${room.type_room.name},
-                                Dành cho ${room.adults} người lớn và ${room.children} bé.
+                                Loại phòng: ${room.type_room.name}.
+                                </p>
+                                <p class="card-description">
+                                Dành cho ${room.adults} người lớn,
+                                </p>
+                                <p class="card-description">
+                                    và ${room.children} trẻ em.
                                 </p>
                                 <a href="/dat-phong/${room.id_room}/${time_start}/${time_end}" class="btn btn-danger btn-round">
                                     <i class="material-icons">format_align_left</i>

@@ -23,6 +23,8 @@
     <link href="css/user-app.css" rel="stylesheet" />
     <link href="css/payment.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
 </head>
 
 <body class="profile-page">
@@ -36,7 +38,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="../presentation.html">Khách sạn SN</a>
+                <a class="navbar-brand" href="">Khách sạn SN</a>
             </div>
 
             <div class="collapse navbar-collapse">
@@ -148,6 +150,12 @@
 <script src="js/dashboard/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+<!-- Wizard Plugin    -->
+<script src="js/dashboard/jquery.bootstrap.wizard.min.js"></script>
+
+<!-- Sweet Alert 2 plugin -->
+<script src="js/dashboard/sweetalert2.js"></script>
 
 <!--  Plugin for Date Time Picker and Full Calendar Plugin-->
 <script src="js/dashboard/moment.min.js"></script>

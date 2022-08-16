@@ -19,6 +19,9 @@
                             <input type="text" class="form-control" id="search-room"
                                 placeholder="Nhập tên phòng bạn muốn tìm" oninput="searchRoom()">
                         </div>
+                        <button class="btn btn-success"><a href="{{ url('/admin/checkout-today/') }}"
+                                style="text-decoration: none; color: white"><i>Phòng cần trả hôm
+                                    nay <b style="color: aqua">( {{ $numb }} )</b></a></button>
                         <hr style="border: none">
                         <hr style="border: none">
                     </div>
