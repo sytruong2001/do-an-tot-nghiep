@@ -4,8 +4,31 @@
 @endpush
 
 @section('content')
-    <div class="col-md-12">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="content">
+                <h2>Loại phòng: {{ $type }}</h2>
+            </div>
+        </div> <!-- end card -->
 
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="content">
+                <h2>Phòng: {{ $room }}</h2>
+            </div>
+        </div> <!-- end card -->
+
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="content">
+                <h2>Nhân viên: {{ $user }}</h2>
+            </div>
+        </div> <!-- end card -->
+
+    </div>
+    <div class="col-md-12">
         <div class="card">
             <div class="header">
                 <div class="col col-sm-9">
@@ -13,7 +36,7 @@
                 </div>
                 <div class="col col-sm-3">
                     <input type="text" name="datefilter" class="form-control input-sm" value=""
-                        placeholder="Chọn ngày" readonly />
+                        placeholder="Chọn ngày" />
                 </div>
             </div>
             <div class="content">

@@ -22,10 +22,12 @@ function create(id) {
         success: function (rs) {
             console.log(rs);
             let total = 0;
+
             let time_start;
             rs.checkin.forEach((data_checkin) => {
+                let startT = data_checkin.time_start.substring(0, 10);
                 $("#name-room").val(data_checkin.name);
-                $("#time-start").val(data_checkin.time_start);
+                $("#time-start").val(startT);
                 $("#time-end").val(currentTime);
                 time_start = data_checkin.time_start;
             });
@@ -140,8 +142,16 @@ function create(id) {
                         sum_price: Number(total),
                     },
                     success: function (rs) {
-                        onFinishWizard();
-                        setTimeout("location.reload(true);", 500);
+                        if (rs == 201) {
+                            console.log("Phiếu phòng đã được trả");
+                        } else {
+                            onFinishWizard();
+                            setTimeout(
+                                (window.location =
+                                    "http://127.0.0.1:8000/admin/checkout"),
+                                1000
+                            );
+                        }
                     },
                 });
             });

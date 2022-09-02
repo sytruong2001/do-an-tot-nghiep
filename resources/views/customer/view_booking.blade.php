@@ -36,16 +36,27 @@
                             <div class="col-md-2">
                             </div>
                             <div class="col-md-2">
+                                Số phòng:
+                            </div>
+                            <div class="col-md-3">
+                                <b>: {{ $checkin->name }}</b>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-2">
+                            </div>
+                            <div class="col-md-2">
                                 Ngày nhận
                             </div>
                             <div class="col-md-3">
-                                <b>: {{ $checkin->time_start }}</b>
+                                <b>: {{ substr($checkin->time_start, 0, 10) }}</b>
                             </div>
                             <div class="col-md-2">
                                 Ngày trả
                             </div>
                             <div class="col-md-3">
-                                <b>: {{ $checkin->time_end }}</b>
+                                <b>: {{ substr($checkin->time_end, 0, 10) }}</b>
                             </div>
                         </div>
                     @endforeach

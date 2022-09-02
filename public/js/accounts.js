@@ -49,6 +49,17 @@ function save() {
     }
 }
 
+function checkNumber() {
+    var phone = $("#phone").val();
+    $("span.phone").empty();
+    if (phone.length < 10 || phone.length > 10) {
+        $("span.phone").html("Số điện thoại phải đủ 10 chữ số.");
+    }
+    if (phone < 0) {
+        $("span.phone").html("Số điện thoại không thể là số âm.");
+    }
+}
+
 function lock(id) {
     $("#insertForm").modal("show");
     $("#exampleModalLongTitle").html("Xác nhận");

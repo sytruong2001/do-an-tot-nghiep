@@ -76,16 +76,20 @@
                                 <div class="form-group">
                                     <label>Số lượng:</label>
                                     <input type="number" class="form-control" id="amount-service" name="amount-service"
-                                        min="0" required>
+                                        min="1" required oninput="checkService()">
+                                    <span class="text-danger error-text amount-service"></span>
+
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Tổng giá thành:</label>
+                                    <label>Giá thành:</label>
                                     <input type="number" class="form-control" id="price-service" name="price-service"
-                                        min="0" required>
+                                        min="1" required oninput="checkService()">
+                                    <span class="text-danger error-text price-service"></span>
+
                                 </div>
                             </div>
                         </div>

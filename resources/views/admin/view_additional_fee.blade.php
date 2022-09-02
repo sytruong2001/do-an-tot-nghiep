@@ -77,7 +77,8 @@
                                 <div class="form-group">
                                     <label>Số lượng:</label>
                                     <input type="number" class="form-control" id="amount-prod" name="amount-prod"
-                                        min="0" required>
+                                        min="1" required oninput="checkAdditional()">
+                                    <span class="text-danger error-text amount-prod"></span>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +87,8 @@
                                 <div class="form-group">
                                     <label>Tổng giá thành:</label>
                                     <input type="number" class="form-control" name="price-prod" id="price-prod"
-                                        min="0" required>
+                                        min="1" required oninput="checkAdditional()">
+                                    <span class="text-danger error-text price-prod"></span>
                                 </div>
                             </div>
                         </div>

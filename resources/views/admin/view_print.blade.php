@@ -204,11 +204,12 @@
                 @foreach ($checkout as $item)
                     <div class="row">
                         <div class="col-s-4">Thời gian thuê phòng</div>
-                        <div class="col-s-8">: <b>{{ $item->time_start }}</b></div>
+                        <div class="col-s-8">: <b>{{ substr($item->time_start, 0, 10) }}</b>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-s-4">Thời gian trả phòng</div>
-                        <div class="col-s-8">: <b>{{ $item->time_end }}</b></div>
+                        <div class="col-s-8">: <b>{{ substr($item->time_end, 0, 10) }}</b></div>
                     </div>
                 @endforeach
                 <div class="row">
@@ -344,10 +345,10 @@ function numberToThousand($a)
     $str = '';
     $j = $leng;
     if ($a == '10') {
-        return 'muoi';
+        return 'mười';
     }
     if ($leng == 2 && $a[0] == '1') {
-        return trim("mươi {$map[$a[1]]}");
+        return trim("mười {$map[$a[1]]}");
     }
     for ($i = 0; $i < $leng; $i++) {
         if ($j == 3) {

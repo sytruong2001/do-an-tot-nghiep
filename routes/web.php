@@ -144,7 +144,10 @@ Route::prefix('api')->group(function () {
         Route::post('/update_checkin/{id}', [checkinApi::class, 'update'])->name('checkin.updateCheckin');
         Route::post('/cancel_checkin/{id}', [checkinApi::class, 'cancel'])->name('checkin.cancelCheckin');
         Route::get('/get_checkin/{id}', [checkoutApi::class, 'getInfo'])->name('checkout.getCheckin');
+
         // Route::get('/get_booking/{id}', [checkintApi::class, 'getBooking'])->name('checkout.getBookingRoom');
+        Route::post('/search-identify', [checkinApi::class, 'searchIdentify'])->name('checkin.searchIdentify');
+
         Route::post('/search-checkin', [checkinApi::class, 'searchRoom'])->name('checkin.searchCheckin');
         Route::get('/search-date-checkin', [checkinApi::class, 'searchDateCheckin'])->name('checkin.searchDateCheckin');
 

@@ -89,7 +89,9 @@ class checkinController extends Controller
     }
     public function thank($id)
     {
-        $checkin = CheckInModel::query()->where('id_checkin_room', $id)->get();
+        $checkin = CheckInModel::query()
+            ->join('rooms', 'checkin.id_room', '=', 'rooms.id_room')
+            ->where('id_checkin_room', $id)->get();
         $customer = CustomersModel::query()->where('id_checkin_room', $id)->get();
         return view('customer.view_booking', [
             'detail_checkin' => $checkin,

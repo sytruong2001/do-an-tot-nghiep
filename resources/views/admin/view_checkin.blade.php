@@ -31,7 +31,7 @@
                         </div>
                         <div class="col-sm-3">
                             <input type="text" name="datefilter" class="form-control input-sm" value=""
-                                placeholder="Chọn ngày" readonly />
+                                placeholder="Chọn ngày" />
                         </div>
                         <hr style="border: none">
                         <hr style="border: none">
@@ -122,6 +122,10 @@
         }
         $('input[name="datefilter"]').daterangepicker({
             autoUpdateInput: false,
+            // timePicker: true,
+            minDate: moment(),
+            // startDate: moment().startOf('hour'),
+            // endDate: moment().startOf('hour').add(32, 'hour'),
             locale: {
                 cancelLabel: 'Clear'
             },

@@ -40,7 +40,7 @@ function getInfo() {
                 <option style="text-align: center">--Chọn giá phòng--
                 </option>
             `;
-            rs2.forEach((el2) => {
+            rs2.price.forEach((el2) => {
                 var first_hour = convertMoney(el2.first_hour);
                 var next_hour = convertMoney(el2.next_hour);
                 htmlPriceRoom += `
@@ -161,6 +161,38 @@ function searchRoom() {
     });
 }
 
+// tìm kiếm đặt phòng theo số CMT/CCCD
+function searchIdentify() {
+    var identify_numb = $("#search-identify").val();
+    $.ajax({
+        url: "/api/admin/search-identify",
+        type: "post",
+        dataType: "json",
+        data: { identify_numb: identify_numb, status: 2 },
+        success: function (rsIdentify) {
+            $("#rooms-content").html("");
+            rsIdentify.room.forEach((elIdentify) => {
+                console.log(elIdentify);
+                var htmlRoom = `
+                <div class="col-md-3" onclick="update(${elIdentify.id_checkin_room})">
+                    <div class="card card-user" style="background-color: gray">
+                        <div class="image">
+                            <img src="https://hotlinedatphong.com/wp-content/uploads/2020/10/khach-san-muong-thanh-holiday-mui-ne-24-800x450-1.jpg"
+                                alt="..." />
+                        </div>
+                        <h3 style="text-align: center; padding-bottom:10px"><b>${elIdentify.name}</b></h3>
+                        <p style="text-align: center; padding-bottom:10px; color: blue">
+                            Ngày nhận: <b>${elIdentify.time_start}</b>
+                        </p>
+                    </div>
+                </div>
+                `;
+                $("#rooms-content").append(htmlRoom);
+            });
+        },
+    });
+}
+
 // tạo phiếu nhận phòng
 function create(id) {
     var x;
@@ -231,6 +263,11 @@ function create(id) {
                                                         name="time_end" min="${currentTime}">
                                                     <span class="text-danger error-text time_end_error"></span>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <span class="text-danger error-text time_error"></span>
                                             </div>
                                         </div>
 
@@ -320,6 +357,7 @@ function create(id) {
                 var name_1 = $("#name1").val();
                 var identify_1 = $("#identify1").val();
                 $("span.time_end_error").empty();
+                $("span.time_error").empty();
                 $("span.name_error_1").empty();
                 $("span.identify_error_1").empty();
                 if (time_end === "") {
@@ -337,10 +375,20 @@ function create(id) {
                         "Chưa điền số CMT/CCCD người nhận phòng."
                     );
                 }
+                if (identify_1.length > 12 || identify_1.length < 12) {
+                    $("span.identify_error_1").html(
+                        "Số CMT/CCCD phải đầy đủ 12 chữ số."
+                    );
+                }
                 console.log(time_start);
                 console.log(time_end);
 
-                if (time_end != "" && name_1 != "" && identify_1 != "") {
+                if (
+                    time_end != "" &&
+                    name_1 != "" &&
+                    identify_1 != "" &&
+                    identify_1.length === 12
+                ) {
                     $.ajax({
                         url: "/api/admin/create_checkin",
                         type: "post",
@@ -352,10 +400,18 @@ function create(id) {
                             $(document).find("span.error-text").text("");
                         },
                         success: function (data) {
+                            if (data.code == 201) {
+                                console.log(data);
+                                var htmlError = `
+                                    Trong khoảng thời gian từ <i>${time_start}</i> đến <i>${time_end}</i> đã có khách đặt phòng này hoặc phòng đang được sử dụng.
+                                    Vui lòng chọn thời gian khác.
+                                `;
+                                $("span.time_error").html(htmlError);
+                            }
                             if (data.code == 200) {
                                 onFinishWizard();
                                 setTimeout("location.reload(true);", 500);
-                            } else {
+                            } else if (data.code == 500) {
                                 $("#insertForm").modal("show");
                                 $("#exampleModalLongTitle").html("Xảy ra lỗi");
                                 $(".modal-body").html(data.error);
@@ -400,6 +456,8 @@ function update(id) {
 
                                     </ul>`;
             rs.checkin.forEach((time) => {
+                let startT = time.time_start.substring(0, 10);
+                let endT = time.time_end.substring(0, 10);
                 html += `
                 <div class="tab-content">
                     <div id="icon-info" class="tab-pane active">
@@ -410,15 +468,20 @@ function update(id) {
                                         <div class="form-group">
                                             <label>Thời gian bắt đầu</label>
                                             <input type="text" class="form-control" id="time_start"
-                                                name="time_start" value="${time.time_start}" readonly>
+                                                name="time_start" value="${startT}" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Thời gian kết thúc</label>
                                             <input type="text" class="form-control" id="time_end"
-                                                name="time_end" value="${time.time_end}" readonly>
+                                                name="time_end" value="${endT}" readonly>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <span class="text-danger error-text time_error"></span>
                                     </div>
                                 </div>
 
@@ -452,7 +515,7 @@ function update(id) {
                             <div class="form-group">
                                 <label>Họ và Tên</label>
                                 <input type="text" class="form-control" id="name" name="name"
-                                    value="${data.name}">
+                                    value="${data.name}" readonly>
                                 <span class="text-danger error-text name_error"></span>
                             </div>
                         </div>
@@ -460,7 +523,7 @@ function update(id) {
                             <div class="form-group">
                                 <label>Số CMT/CCCD</label>
                                 <input type="number" class="form-control" id="identify" name="identify"
-                                    value="${data.identify_numb}">
+                                    value="${data.identify_numb}" readonly>
                                 <span class="text-danger error-text identify_error"></span>
                             </div>
                         </div>
@@ -506,8 +569,14 @@ function submit(id) {
         type: "post",
         dataType: "json",
         success: function (rs) {
-            onFinishWizard();
-            setTimeout("location.reload(true);", 500);
+            if (rs.code == 201) {
+                var time = rs.time.substring(0, 10);
+                var htmlError = `Hiện tại chưa đến ngày nhận phòng. Xin vui lòng thực hiện vào ngày ${time}. `;
+                $("span.time_error").html(htmlError);
+            } else {
+                onFinishWizard();
+                setTimeout("location.reload(true);", 500);
+            }
         },
     });
 }

@@ -114,15 +114,18 @@
                                                     <label>Chọn loại phòng:</label>
                                                     <select class="form-control" id="type_room"
                                                         name="type_room"></select><br>
+
                                                     <span id="type_room_error" class="text-danger"></span>
                                                     <label>Giá tiền giờ đầu tiên</label>
                                                     <input type="number" class="form-control" id="first_hour"
                                                         name="first_hour" placeholder="Nhập giá trị..." pattern="[0-9]*"
-                                                        required><br>
+                                                        required oninput="checkNumber()">
+                                                    <span class="text-danger error-text first_hour"></span><br>
                                                     <label>Giá tiền giờ tiếp theo</label>
                                                     <input type="number" class="form-control" id="next_hour"
                                                         name="next_hour" placeholder="Nhập giá trị..." pattern="[0-9]*"
-                                                        required>
+                                                        required oninput="checkNumber()">
+                                                    <span class="text-danger error-text next_hour"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -130,7 +133,6 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                                     <button type="submit" class="btn btn-primary" onclick="save()" id="button"></button>
                                 </div>
                             </form>

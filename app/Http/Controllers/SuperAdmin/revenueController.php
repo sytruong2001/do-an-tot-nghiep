@@ -4,6 +4,9 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CheckOutModel;
+use App\Models\RoomModel;
+use App\Models\TypeRoomModel;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -51,8 +54,16 @@ class revenueController extends Controller
             'labels' => $labels,
             'data' => $data,
         ];
+
+        $room = RoomModel::query()->where('status', '<>', 5)->count();
+        $type = TypeRoomModel::query()->where('status', '<>', 1)->count();
+        $user = User::query()
+            ->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
+            ->where('model_has_roles.role_id', '=', 2)
+            ->count();
+
         return view('super-admin.view_revenue', [
-            'datas' => $datas, 'checkout' => $checkout,
+            'datas' => $datas, 'checkout' => $checkout, 'room' => $room, 'type' => $type, 'user' => $user
         ], compact('labels', 'data'));
     }
 }

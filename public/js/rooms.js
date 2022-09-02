@@ -11,6 +11,8 @@ function add() {
     $("#insertForm").modal("show");
     $("#exampleModalLongTitle").html("Thêm mới phòng");
     $("#button").html("Thêm");
+    var button = document.querySelector('[id="button"]');
+    button.setAttribute("disabled", true);
     var id = null;
     $.ajax({
         url: "/api/superadmin/get_room/" + id,
@@ -36,6 +38,8 @@ function add() {
 //     console.log(num);
 // }
 function edit(id) {
+    $("span.adults").empty();
+    $("span.children").empty();
     $.ajax({
         url: "/api/superadmin/get_room/" + id,
         type: "get",
@@ -123,6 +127,36 @@ function save() {
                 }
             },
         });
+    }
+}
+
+function checkNumber() {
+    var first = $("#adults").val();
+    var next = $("#children").val();
+    $("span.adults").empty();
+    $("span.children").empty();
+    var button = document.querySelector('[id="button"]');
+    var length1 = first.length;
+    var length2 = next.length;
+    if (first < 1) {
+        $("span.adults").html("Số người lớn phải lớn hơn 0 đồng.");
+        button.setAttribute("disabled", true);
+    }
+    if (next < 0) {
+        $("span.children").html("Số trẻ em phải lớn hơn hoặc bằng 0 đồng.");
+        button.setAttribute("disabled", true);
+    }
+    if (first >= 0 && next >= 0) {
+        // button.removeAttribute("disabled");
+        if (length1 == 0) {
+            button.setAttribute("disabled", true);
+        }
+        if (length2 == 0) {
+            button.setAttribute("disabled", true);
+        }
+        if (length1 > 0 && length2 > 0) {
+            button.removeAttribute("disabled");
+        }
     }
 }
 

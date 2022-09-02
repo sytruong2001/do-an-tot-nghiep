@@ -72,7 +72,7 @@ class checkoutController extends Controller
             ['id_checkin_room', '=', $id],
             ['status', '=', 0],
         ])->get();
-        // dd($get_info_add);
+        // dd($get_info_checkin);
         return view('admin.view_all_checkout', [
             'checkin' => $get_info_checkin,
             'customers' => $get_info_customer,

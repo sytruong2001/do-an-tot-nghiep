@@ -257,7 +257,8 @@
                                                 <div class="form-group">
                                                     <label>Số điện thoại:</label>
                                                     <input type="number" class="form-control" id="phone"
-                                                        name="phone" required>
+                                                        name="phone" required oninput="checkNumber()">
+                                                    <span class="text-danger error-text phone"></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -273,7 +274,6 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                                     <button type="submit" class="btn btn-primary" onclick="save()"
                                         id="button"></button>
                                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\AdditionalFeeModel;
 use App\Models\CheckInModel;
+use App\Models\CheckOutModel;
 use App\Models\CustomersModel;
 use App\Models\PriceRoomModel;
 use App\Models\ServicesModel;
@@ -56,25 +57,32 @@ class checkoutApi extends Controller
         $time_end = $request->get('time_end');
         $sum_price = $request->get('sum_price');
 
-        $createCheckout = DB::table('checkout')
-            ->insert([
-                'time_start' => $time_start,
-                'time_end' => $time_end,
-                'id_checkin_room' => $id_checkin_room,
-                'sum_price' => $sum_price,
-            ]);
-        $updateCheckin = DB::table('checkin')
+        $check = CheckOutModel::query()
             ->where('id_checkin_room', $id_checkin_room)
-            ->update([
-                'status' => 1,
-            ]);
-        $get_id_room = CheckInModel::query()->where('id_checkin_room', $id_checkin_room)->select('id_room')->first();
-        $id_room = $get_id_room->id_room;
-        $updateRoom = DB::table('rooms')
-            ->where('id_room', $id_room)
-            ->update([
-                'status' => 2,
-            ]);
-        echo json_encode(200);
+            ->count();
+        if ($check == 0) {
+            $createCheckout = DB::table('checkout')
+                ->insert([
+                    'time_start' => $time_start,
+                    'time_end' => $time_end,
+                    'id_checkin_room' => $id_checkin_room,
+                    'sum_price' => $sum_price,
+                ]);
+            $updateCheckin = DB::table('checkin')
+                ->where('id_checkin_room', $id_checkin_room)
+                ->update([
+                    'status' => 1,
+                ]);
+            $get_id_room = CheckInModel::query()->where('id_checkin_room', $id_checkin_room)->select('id_room')->first();
+            $id_room = $get_id_room->id_room;
+            $updateRoom = DB::table('rooms')
+                ->where('id_room', $id_room)
+                ->update([
+                    'status' => 2,
+                ]);
+            echo json_encode(200);
+        } else {
+            echo json_encode(201);
+        }
     }
 }

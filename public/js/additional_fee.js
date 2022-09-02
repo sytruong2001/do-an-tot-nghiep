@@ -12,6 +12,8 @@ function addAdditionalFee(id) {
     $("#exampleModalLongTitle-additional-fee").html("Thêm phụ phí tổn thất");
     $("#btn-additional-fee").html("Thêm");
     $("#id-checkin-room").val(id);
+    var button = document.querySelector('[id="btn-additional-fee"]');
+    button.setAttribute("disabled", true);
 }
 function editAdditionalFee(id) {
     $.ajax({
@@ -23,7 +25,7 @@ function editAdditionalFee(id) {
             rs.forEach((data) => {
                 name = data.name;
                 amount = data.amount;
-                price = data.price;
+                price = data.price / data.amount;
             });
             $("#insertForm-additional-fee").modal("show");
             $("#exampleModalLongTitle-additional-fee").html(
@@ -81,6 +83,35 @@ function saveAdditionalFee() {
                 }
             },
         });
+    }
+}
+function checkAdditional() {
+    var amountAdditional = $("#amount-prod").val();
+    var priceProd = $("#price-prod").val();
+    $("span.amount-prod").empty();
+    $("span.price-prod").empty();
+    var button = document.querySelector('[id="btn-additional-fee"]');
+    var length1 = amountAdditional.length;
+    var length2 = priceProd.length;
+    if (amountAdditional < 1) {
+        $("span.amount-prod").html("Số lượng phải lớn hơn 0 đồng.");
+        button.setAttribute("disabled", true);
+    }
+    if (priceProd < 1) {
+        $("span.price-prod").html("Giá tiền phải lớn hơn 0 đồng.");
+        button.setAttribute("disabled", true);
+    }
+    if (amountAdditional >= 0 && priceProd >= 0) {
+        // button.removeAttribute("disabled");
+        if (length1 == 0) {
+            button.setAttribute("disabled", true);
+        }
+        if (length2 == 0) {
+            button.setAttribute("disabled", true);
+        }
+        if (length1 > 0 && length2 > 0) {
+            button.removeAttribute("disabled");
+        }
     }
 }
 

@@ -130,7 +130,7 @@
                 <li>
                     <a href="admin/checkin">
                         <i class="pe-7s-graph"></i>
-                        <p>Checkin <span style="color:blue" id="numb-room-checkin"></span></p>
+                        <p>Đặt phòng <span style="color:blue" id="numb-room-checkin"></span></p>
                     </a>
                 </li>
                 <li>
@@ -142,7 +142,7 @@
                 <li>
                     <a href="admin/checkout">
                         <i class="pe-7s-graph"></i>
-                        <p>Checkout <span style="color:blue" id="numb-room-checkout"></span></p>
+                        <p>Trả phòng <span style="color:blue" id="numb-room-checkout"></span></p>
                     </a>
                 </li>
                 <li>

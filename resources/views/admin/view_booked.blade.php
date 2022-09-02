@@ -16,8 +16,8 @@
                 <div class="content">
                     <div class="row">
                         <div class="col-md-4">
-                            <input type="text" class="form-control" id="search-room"
-                                placeholder="Nhập số CMT/CCCD bạn muốn tìm" oninput="searchRoom()">
+                            <input type="text" class="form-control" id="search-identify"
+                                placeholder="Nhập số CMT/CCCD bạn muốn tìm" oninput="searchIdentify()">
                         </div>
                         <button class="btn btn-success"><a href="{{ url('/admin/checkin-today/') }}"
                                 style="text-decoration: none; color: white"><i>Phòng hôm nay khách nhận <b

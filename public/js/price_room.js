@@ -11,6 +11,8 @@ function add() {
     $("#insertForm").modal("show");
     $("#exampleModalLongTitle").html("Thêm mức giá phòng");
     $("#button").html("Thêm");
+    var button = document.querySelector('[id="button"]');
+    button.setAttribute("disabled", true);
     var id = null;
     $.ajax({
         url: "/api/superadmin/get_price_room/" + id,
@@ -19,7 +21,7 @@ function add() {
         success: function (rs) {
             console.log(rs);
             $("#type_room").html("");
-            rs.forEach((data) => {
+            rs.data.forEach((data) => {
                 var html = `
                     <option value="${data.id_type_room}">${data.name}</option>
                 `;
@@ -28,6 +30,7 @@ function add() {
         },
     });
 }
+
 // function covertNumb(numb) {
 //     let num = new Intl.NumberFormat("vi", {
 //         style: "currency",
@@ -80,6 +83,7 @@ function save() {
     var id = $("#id_price_room").val();
     // console.log(id);
     // debugger;
+
     if (id == "") {
         $.ajax({
             url: "/api/superadmin/create_price_room",
@@ -122,6 +126,38 @@ function save() {
     }
 }
 
+function checkNumber() {
+    var first = $("#first_hour").val();
+    var next = $("#next_hour").val();
+    $("span.first_hour").empty();
+    $("span.next_hour").empty();
+    var button = document.querySelector('[id="button"]');
+    var length1 = first.length;
+    var length2 = next.length;
+
+    if (first < 0) {
+        $("span.first_hour").html("Số tiền phải lớn hơn 0 đồng.");
+        button.setAttribute("disabled", true);
+    }
+    if (next < 0) {
+        $("span.next_hour").html("Số tiền phải lớn hơn 0 đồng.");
+        button.setAttribute("disabled", true);
+    }
+    console.log(typeof first);
+    console.log(first.length);
+    if (first >= 0 && next >= 0) {
+        button.removeAttribute("disabled");
+        if (length1 == 0) {
+            button.setAttribute("disabled", true);
+        }
+        if (length2 == 0) {
+            button.setAttribute("disabled", true);
+        }
+        if (length1 > 0 && length2 > 0) {
+            button.removeAttribute("disabled");
+        }
+    }
+}
 function lock(id) {
     $("#insertForm").modal("show");
     $("#exampleModalLongTitle").html("Xác nhận");

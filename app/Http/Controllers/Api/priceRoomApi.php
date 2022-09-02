@@ -19,8 +19,11 @@ class priceRoomApi extends Controller
             $json['type'] = $type_room;
             echo json_encode($json);
         } else {
-            $data = DB::table('price_room')->where('status', 0)->get();
-            echo json_encode($data);
+            $data = DB::table('type_room')->where('status', 0)->get();
+            $price = DB::table('price_room')->where('status', 0)->get();
+            $json['data'] = $data;
+            $json['price'] = $price;
+            echo json_encode($json);
         }
     }
     public function create(Request $request)

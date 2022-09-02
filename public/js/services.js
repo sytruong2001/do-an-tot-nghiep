@@ -12,6 +12,8 @@ function addService(id) {
     $("#exampleModalLongTitle").html("Thêm dịch vụ");
     $("#btn-services").html("Thêm");
     $("#id-checkin-room").val(id);
+    var button = document.querySelector('[id="btn-services"]');
+    button.setAttribute("disabled", true);
 }
 function editService(id) {
     $.ajax({
@@ -23,7 +25,7 @@ function editService(id) {
             rs.forEach((data) => {
                 name = data.name;
                 amount = data.amount;
-                price = data.price;
+                price = data.price / data.amount;
             });
             $("#insertForm-services").modal("show");
             $("#exampleModalLongTitle").html(
@@ -83,7 +85,36 @@ function saveService() {
         });
     }
 }
+function checkService() {
+    var amountService = $("#amount-service").val();
+    var priceService = $("#price-service").val();
+    $("span.amount-service").empty();
+    $("span.price-service").empty();
+    var button = document.querySelector('[id="btn-services"]');
 
+    var length1 = amountService.length;
+    var length2 = priceService.length;
+    if (amountService < 1) {
+        $("span.amount-service").html("Số lượng phải lớn hơn 0 đồng.");
+        button.setAttribute("disabled", true);
+    }
+    if (priceService < 1) {
+        $("span.price-service").html("Giá tiền phải lớn hơn 0 đồng.");
+        button.setAttribute("disabled", true);
+    }
+    if (amountService >= 0 && priceService >= 0) {
+        // button.removeAttribute("disabled");
+        if (length1 == 0) {
+            button.setAttribute("disabled", true);
+        }
+        if (length2 == 0) {
+            button.setAttribute("disabled", true);
+        }
+        if (length1 > 0 && length2 > 0) {
+            button.removeAttribute("disabled");
+        }
+    }
+}
 function deleteService(id) {
     $("#insertForm-services").modal("show");
     $("#exampleModalLongTitle").html("Xác nhận");

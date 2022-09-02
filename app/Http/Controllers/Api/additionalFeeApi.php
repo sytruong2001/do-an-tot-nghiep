@@ -23,7 +23,7 @@ class additionalFeeApi extends Controller
             ->insert([
                 'name' => $name,
                 'amount' => $amount,
-                'price' => $price,
+                'price' => $price * $amount,
                 'id_checkin_room' => $idCheckinRoom,
                 'status' => 0,
             ]);
@@ -40,7 +40,7 @@ class additionalFeeApi extends Controller
             ->update([
                 'name' => $name,
                 'amount' => $amount,
-                'price' => $price,
+                'price' => $price * $amount,
             ]);
         echo json_encode(200);
     }

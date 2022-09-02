@@ -118,7 +118,7 @@
                                                         name="id_room">
                                                     <label>Số phòng:</label>
                                                     <input type="text" class="form-control" id="name" name="name"
-                                                        required><br>
+                                                        required>
                                                     <span id="room_error" class="text-danger"></span>
                                                     <label>Chọn loại phòng:</label>
                                                     <select class="form-control" id="type_room"
@@ -126,11 +126,14 @@
                                                     <span id="type_room_error" class="text-danger"></span>
                                                     <label>Số lượng người lớn:</label>
                                                     <input type="number" class="form-control" id="adults" name="adults"
-                                                        placeholder="Nhập giá trị..." pattern="[0-9]*" required><br>
+                                                        placeholder="Nhập giá trị..." pattern="[0-9]*" required
+                                                        oninput="checkNumber()">
+                                                    <span class="text-danger error-text adults"></span><br>
                                                     <label>Số lượng trẻ nhỏ:</label>
                                                     <input type="number" class="form-control" id="children"
                                                         name="children" placeholder="Nhập giá trị..." pattern="[0-9]*"
-                                                        required>
+                                                        required required oninput="checkNumber()">
+                                                    <span class="text-danger error-text children"></span><br>
                                                 </div>
                                             </div>
                                         </div>
@@ -138,7 +141,6 @@
                                 </div>
 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                                     <button type="submit" class="btn btn-primary" onclick="save()"
                                         id="button"></button>
                                 </div>
