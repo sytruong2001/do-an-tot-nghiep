@@ -70,15 +70,24 @@ class RoomApi extends Controller
         $adults = $request->get('adults');
         $children = $request->get('children');
         $id = $request->get('id');
-        $update = DB::table('rooms')
-            ->where('id_room', $id)
-            ->update([
-                'id_type_room' => $id_type_room,
-                'name' => $name,
-                'adults' => $adults,
-                'children' => $children,
-            ]);
-        echo json_encode(200);
+        $checkNameRoom = RoomModel::query()->where('id_room', '<>', $id)->where('name', 'like', $name)->where('status', '<>', 5)->count();
+        if ($checkNameRoom == 0) {
+            $update = DB::table('rooms')
+                ->where('id_room', $id)
+                ->update([
+                    'id_type_room' => $id_type_room,
+                    'name' => $name,
+                    'adults' => $adults,
+                    'children' => $children,
+                ]);
+            $json['code'] = 200;
+            $json['success'] = "Thay đổi thành công";
+            echo json_encode($json);
+        } else {
+            $json['code'] = 501;
+            $json['errorr'] = "Tên phòng đã tồn tại";
+            echo json_encode($json);
+        }
     }
     // ẩn hoặc bỏ ẩn đối với phòng
     public function lockOrUnlock($id)

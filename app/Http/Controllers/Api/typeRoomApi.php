@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\TypeRoomModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Nette\Utils\Json;
@@ -40,12 +41,21 @@ class typeRoomApi extends Controller
     {
         $name = $request->get('name');
         $id = $request->get('id');
-        $update = DB::table('type_room')
-            ->where('id_type_room', $id)
-            ->update([
-                'name' => $name,
-            ]);
-        echo json_encode(200);
+        $checkTypeRoom = TypeRoomModel::query()->where('id_type_room', '<>', $id)->where('name', 'like', $name)->where('status', 0)->count();
+        if ($checkTypeRoom == 0) {
+            $update = DB::table('type_room')
+                ->where('id_type_room', $id)
+                ->update([
+                    'name' => $name,
+                ]);
+            $json['code'] = 200;
+            $json['success'] = "Thay đổi thành công";
+            echo json_encode($json);
+        } else {
+            $json['code'] = 501;
+            $json['errorr'] = "Tên loại phòng đã tồn tại";
+            echo json_encode($json);
+        }
     }
     // ẩn hoặc bỏ ẩn loại phòng
     public function lockOrUnlock($id)

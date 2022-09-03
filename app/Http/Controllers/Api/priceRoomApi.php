@@ -54,14 +54,23 @@ class priceRoomApi extends Controller
         $first_hour = $request->get('first_hour');
         $next_hour = $request->get('next_hour');
         $id = $request->get('id');
-        $update = DB::table('price_room')
-            ->where('id_price_room', $id)
-            ->update([
-                'id_type_room' => $id_type_room,
-                'first_hour' => $first_hour,
-                'next_hour' => $next_hour,
-            ]);
-        echo json_encode(200);
+        $checkPriceRoom = PriceRoomModel::query()->where('id_price_room', '<>', $id)->where('id_type_room', '=', $id_type_room)->where('status', 0)->count();
+        if ($checkPriceRoom == 0) {
+            $update = DB::table('price_room')
+                ->where('id_price_room', $id)
+                ->update([
+                    'id_type_room' => $id_type_room,
+                    'first_hour' => $first_hour,
+                    'next_hour' => $next_hour,
+                ]);
+            $json['code'] = 200;
+            $json['success'] = "Thay đổi thành công";
+            echo json_encode($json);
+        } else {
+            $json['code'] = 501;
+            $json['errorr'] = "Loại phòng bạn chọn đã có giá phòng";
+            echo json_encode($json);
+        }
     }
 
     // ẩn hoặc bỏ ẩn đối với giá phòng

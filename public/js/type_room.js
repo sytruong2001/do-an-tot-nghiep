@@ -49,7 +49,11 @@ function save() {
                     $("#frm")[0].reset();
                     onFinishWizard();
                 } else {
-                    $("#name_error").html("Tên phòng đã tồn tại");
+                    swal(
+                        "Đã xảy ra lỗi!",
+                        "Loại phòng bạn thêm đã có từ trước",
+                        "warning"
+                    );
                 }
             },
         });
@@ -63,11 +67,11 @@ function save() {
                 id: id,
             },
             success: function (data) {
-                if (data === 200) {
+                if (data.code === 200) {
                     $("#frm")[0].reset();
                     onFinishWizard();
-                } else {
-                    $("#name_error").html("Tên phòng đã tồn tại");
+                } else if (data.code === 501) {
+                    swal("Đã xảy ra lỗi!", data.errorr, "warning");
                 }
             },
         });

@@ -99,8 +99,10 @@ function save() {
                     $("#frm")[0].reset();
                     onFinishWizard();
                 } else {
-                    $("#name_error").html(
-                        "Loại phòng bạn thêm đã có giá tiền từ trước"
+                    swal(
+                        "Đã xảy ra lỗi!",
+                        "Loại phòng bạn thêm đã có giá tiền từ trước",
+                        "warning"
                     );
                 }
             },
@@ -117,9 +119,11 @@ function save() {
                 id: id,
             },
             success: function (data) {
-                if (data === 200) {
+                if (data.code === 200) {
                     $("#frm")[0].reset();
                     onFinishWizard();
+                } else if (data.code === 501) {
+                    swal("Đã xảy ra lỗi!", data.errorr, "warning");
                 }
             },
         });
