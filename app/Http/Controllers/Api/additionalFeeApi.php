@@ -8,11 +8,13 @@ use Illuminate\Support\Facades\DB;
 
 class additionalFeeApi extends Controller
 {
+    // lấy thông tin chi tiết tổn thất
     public function getinfo($id)
     {
         $data = DB::table('additional_fee')->where('id_additional_fee', $id)->get();
         echo json_encode($data);
     }
+    // tạo mới tổn thất
     public function create(Request $request)
     {
         $name = $request->get('nameAdditionalFee');
@@ -29,6 +31,7 @@ class additionalFeeApi extends Controller
             ]);
         echo json_encode(200);
     }
+    // cập nhật tổn thất
     public function update(Request $request)
     {
         $name = $request->get('nameAdditionalFee');
@@ -44,6 +47,7 @@ class additionalFeeApi extends Controller
             ]);
         echo json_encode(200);
     }
+    // xóa tổn thất
     public function destroy($id)
     {
         $update = DB::table('additional_fee')

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class priceRoomApi extends Controller
 {
+    // thông tin chi tiết về giá phòng
     public function getinfo($id)
     {
         if ($id !== "null") {
@@ -26,6 +27,7 @@ class priceRoomApi extends Controller
             echo json_encode($json);
         }
     }
+    // tạo mới giá phòng
     public function create(Request $request)
     {
         $id_type_room = $request->get('id_type_room');
@@ -45,6 +47,7 @@ class priceRoomApi extends Controller
             echo json_encode(201);
         }
     }
+    // cập nhật giá phòng
     public function update(Request $request)
     {
         $id_type_room = $request->get('id_type_room');
@@ -60,6 +63,8 @@ class priceRoomApi extends Controller
             ]);
         echo json_encode(200);
     }
+
+    // ẩn hoặc bỏ ẩn đối với giá phòng
     public function lockOrUnlock($id)
     {
         // xem trạng thái hoạt động của bảng giá phòng theo id

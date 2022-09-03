@@ -8,11 +8,13 @@ use Illuminate\Support\Facades\DB;
 
 class servicesApi extends Controller
 {
+    // lấy thông tin chi tiết dịch vụ
     public function getinfo($id)
     {
         $data = DB::table('services')->where('id_service', $id)->get();
         echo json_encode($data);
     }
+    // tạo mới dịch vụ
     public function create(Request $request)
     {
         $name = $request->get('nameService');
@@ -30,6 +32,7 @@ class servicesApi extends Controller
             ]);
         echo json_encode(200);
     }
+    // cập nhật dịch vụ
     public function update(Request $request)
     {
         $name = $request->get('nameService');
@@ -45,6 +48,7 @@ class servicesApi extends Controller
             ]);
         echo json_encode(200);
     }
+    // xóa dịch vụ
     public function destroy($id)
     {
         $update = DB::table('services')

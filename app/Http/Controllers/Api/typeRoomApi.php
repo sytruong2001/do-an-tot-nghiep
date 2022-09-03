@@ -9,6 +9,7 @@ use Nette\Utils\Json;
 
 class typeRoomApi extends Controller
 {
+    // lấy thông tin chi tiết loại phòng
     public function getinfo($id)
     {
         if ($id !== "null") {
@@ -18,6 +19,7 @@ class typeRoomApi extends Controller
         }
         echo json_encode($data);
     }
+    // tạo mới loại phòng
     public function create(Request $request)
     {
         $name = $request->get('name');
@@ -33,6 +35,7 @@ class typeRoomApi extends Controller
             echo json_encode(201);
         }
     }
+    // cập nhật loại phòng
     public function update(Request $request)
     {
         $name = $request->get('name');
@@ -44,6 +47,7 @@ class typeRoomApi extends Controller
             ]);
         echo json_encode(200);
     }
+    // ẩn hoặc bỏ ẩn loại phòng
     public function lockOrUnlock($id)
     {
         $check = DB::table('type_room')->where('id_type_room', $id)->select('status')->first();

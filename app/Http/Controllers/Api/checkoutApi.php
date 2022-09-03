@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class checkoutApi extends Controller
 {
+    // lấy thông tin chi tiết về phiếu nhận phòng theo mã id
     public function getinfo($id)
     {
         $get_checkin = CheckInModel::query()
@@ -50,13 +51,15 @@ class checkoutApi extends Controller
         echo json_encode($json);
     }
 
+    // tạo mới phiếu trả phòng
     public function create(Request $request)
     {
         $id_checkin_room = $request->get('id_checkin_room');
         $time_start = $request->get('time_start');
         $time_end = $request->get('time_end');
         $sum_price = $request->get('sum_price');
-
+        // kiểm tra xem phiếu nhận phòng đã được trả hay chưa?
+        // nếu chưa thì thực hiện trả phòng, trạng thái phiếu nhận phòng sẽ chuyển về 1
         $check = CheckOutModel::query()
             ->where('id_checkin_room', $id_checkin_room)
             ->count();

@@ -15,6 +15,7 @@ use PDF;
 
 class checkoutController extends Controller
 {
+    // lấy thông tin tất cả phiếu cần trả phòng
     public function index()
     {
         $end_date = Carbon::today();
@@ -23,12 +24,15 @@ class checkoutController extends Controller
             ->where('checkin.status', 0)
             ->orderBy('checkin.time_end', 'asc')
             ->get();
+        // số phòng cần trả hôm nay
         $get_info = CheckInModel::query()
             ->where('checkin.status', 0)
             ->whereDate('checkin.time_end', $end_date)
             ->count();
         return view('admin.view_checkout', ['rooms' => $data, 'numb' => $get_info]);
     }
+
+    // lấy thông tin các phiếu trả phòng hôm nay
     public function searchCheckoutToday()
     {
         $end_date = Carbon::today();
@@ -44,6 +48,7 @@ class checkoutController extends Controller
         return view('admin.view_checkout', ['rooms' => $data, 'numb' => $get_info]);
     }
 
+    // lấy thông tin tất cả các phiếu đã trả phòng
     public function history()
     {
         $data = CheckOutModel::query()
@@ -58,6 +63,7 @@ class checkoutController extends Controller
         return view('admin.view_history', ['index' => 1, 'checkout' => $data, 'customer' => $customer, 'rooms' => $room]);
     }
 
+    // lấy chi tiết thông tin phiếu nhận phòng để thực hiện trả phòng
     public function getInfo($id)
     {
         $get_info_checkin = CheckInModel::query()
@@ -83,7 +89,7 @@ class checkoutController extends Controller
             'sum_additional-fee' => 0,
         ]);
     }
-
+    // in hóa đơn
     public function print($id)
     {
         $pdf = \App::make('dompdf.wrapper');

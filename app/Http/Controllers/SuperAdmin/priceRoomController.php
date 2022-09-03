@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class priceRoomController extends Controller
 {
+    // lấy tất cả thông tin giá phòng
     public function index()
     {
         $data = PriceRoomModel::query()

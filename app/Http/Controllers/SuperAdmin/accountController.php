@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class accountController extends Controller
 {
+    // lấy thông tin nhân viên
     public function index()
     {
         $get_user = User::query()
@@ -27,6 +28,7 @@ class accountController extends Controller
             'index' => 1,
         ]);
     }
+    // lấy thông tin chi tiết cá nhận quản lý hoặc lễ tân
     public function getInfo($id)
     {
         $check_info_user = InfoUserModel::query()->where('user_id', $id)->count();

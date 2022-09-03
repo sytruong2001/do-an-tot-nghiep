@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class revenueController extends Controller
 {
+    // lấy thống kê doanh số mỗi ngày trong 7 ngày gần nhất
     public function index(Request $request)
     {
         $start_date = Carbon::today()->subDays(6);

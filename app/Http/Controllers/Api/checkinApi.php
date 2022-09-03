@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Notification;
 
 class checkinApi extends Controller
 {
+    // lấy thông tin chi tiết của phòng theo mã id
     public function getinfo($id)
     {
         $room = RoomModel::query()->where('id_room', $id)->get();
@@ -23,6 +24,7 @@ class checkinApi extends Controller
         $json['type'] = $type_room;
         echo json_encode($json);
     }
+    // thông tin chi tiết của phiếu đặt, nhận phòng theo mã id
     public function getCheckin($id)
     {
         $checkin = CheckInModel::query()->where('id_checkin_room', $id)->get();
@@ -32,8 +34,10 @@ class checkinApi extends Controller
         echo json_encode($json);
     }
 
+    // tạo mới phiếu đặt, nhận phòng
     public function create(Request $request)
     {
+        // kiểm tra trong khoảng thời gian khách đặt, phòng khách đặt có còn trống hay không?
         $check_room = CheckInModel::query()
             ->where([
                 ['time_start', '<=', $request->time_start],
@@ -57,7 +61,8 @@ class checkinApi extends Controller
                 ['id_room', $request->id_room],
             ])
             ->count();
-
+        // nếu phòng còn trống thì thực hiện đặt phòng, nếu không thì quay lại và thông báo cho lễ tân biết thời gian không phù hợp
+        // nếu thành công đặt phòng trạng thái phiếu đặt phòng sẽ là 2
         if ($check_room == 0) {
             $check_status_room = DB::table('rooms')->where('id_room', $request->id_room)->select('status')->first();
             $status_room = $check_status_room->status;
@@ -102,6 +107,8 @@ class checkinApi extends Controller
         }
     }
 
+    // xác nhận thực hiện thao tác nhận phòng theo mã id
+    // trạng thái phiếu đặt phòng sẽ được chuyển về 0
     public function update($id)
     {
         $today = Carbon::today();
@@ -128,6 +135,9 @@ class checkinApi extends Controller
             echo json_encode($json);
         }
     }
+
+    // thao tác hủy đặt phòng
+    // trạng thái phiếu đặt phòng sẽ được chuyển về 3
     public function cancel($id)
     {
         $update_status_checkin = DB::table('checkin')
@@ -167,7 +177,7 @@ class checkinApi extends Controller
     {
         $check_status_room = DB::table('rooms')->where('id_room', $request->id_room)->first();
         $nameRoom = $check_status_room->name;
-        //Thông báo sau khi thanh toán tiền đặt cọc
+        //Thông báo sau khi thanh toán tiền đặt cọc về email
         $user = User::first();
 
         $payment = [
@@ -245,6 +255,7 @@ class checkinApi extends Controller
         echo json_encode($jsonResult['payUrl']);
     }
 
+    // tìm kiếm phòng theo tên phòng
     public function searchRoom(Request $request)
     {
         $name = $request->get('name');
@@ -256,6 +267,7 @@ class checkinApi extends Controller
         echo json_encode($json);
     }
 
+    // tìm kiếm phiếu đặt phòng theo số CMT/CCCD
     public function searchIdentify(Request $request)
     {
         $identify_numb = $request->get('identify_numb');
@@ -271,6 +283,7 @@ class checkinApi extends Controller
         echo json_encode($json);
     }
 
+    // tìm kiếm phòng trống theo ngày nhận, trả phòng
     public function searchDateCheckin(Request $request)
     {
         $checkin = CheckInModel::query()

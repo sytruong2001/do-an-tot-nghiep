@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class RoomApi extends Controller
 {
+    // lấy thông tin chi tiết về phòng
     public function getinfo($id)
     {
         if ($id !== "null") {
@@ -25,6 +26,7 @@ class RoomApi extends Controller
             echo json_encode($data);
         }
     }
+    // lấy trạng thái phòng
     public function getStatusRoom()
     {
 
@@ -38,6 +40,7 @@ class RoomApi extends Controller
         $json['clean'] = $clean;
         echo json_encode($json);
     }
+    // tạo mới phòng
     public function create(Request $request)
     {
         $id_type_room = $request->get('id_type_room');
@@ -59,6 +62,7 @@ class RoomApi extends Controller
             echo json_encode(201);
         }
     }
+    // cập nhật thông tin phòng
     public function update(Request $request)
     {
         $id_type_room = $request->get('id_type_room');
@@ -76,6 +80,7 @@ class RoomApi extends Controller
             ]);
         echo json_encode(200);
     }
+    // ẩn hoặc bỏ ẩn đối với phòng
     public function lockOrUnlock($id)
     {
         // xem trạng thái hoạt động của bảng phòng theo id
