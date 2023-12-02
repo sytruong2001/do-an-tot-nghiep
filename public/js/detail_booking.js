@@ -24,8 +24,10 @@ function getInfo() {
     console.log(id);
 
     $("#total_time").val(total_time);
-    var first = Number($("#first").val());
-    var next = Number($("#next").val());
+    let first = Number($("#first").val());
+    first = !Number.isNaN(first) ? first : 0;
+    let next = Number($("#next").val());
+    next = !Number.isNaN(next) ? next : 0;
     var total_money;
     if (total_time < 1) {
         total_money = first * total_time;
@@ -35,7 +37,7 @@ function getInfo() {
     $("#total").val(convertMoney(total_money));
     $("#tien-coc").val(convertMoney(total_money * 0.2));
     $("#deposit").val(total_money * 0.2);
-    // console.log(total_money);
+    console.log(total_money);
 }
 function convertMoney(number) {
     let num = new Intl.NumberFormat("vi", {
